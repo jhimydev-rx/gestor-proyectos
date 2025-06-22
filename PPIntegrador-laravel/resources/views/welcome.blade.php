@@ -7,35 +7,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4F46E5;  /* Índigo */
-            --secondary: #10B981; /* Esmeralda */
-            --accent: #F59E0B;   /* Ámbar */
-            --dark: #1F2937;     /* Gris oscuro */
-            --light: #F9FAFB;    /* Gris claro */
-            --text: #374151;     /* Gris texto */
+            --primary: #9D4EDD;
+            --secondary: #7B2CBF;
+            --accent: #E0AAFF;
+            --dark: #0a0a0a;
+            --light: #121212;
+            --text: #F3F3F3;
         }
-        
+
         body {
             font-family: 'Instrument Sans', sans-serif;
-            background-color: var(--light);
+            background-color: var(--dark);
             color: var(--text);
             margin: 0;
             padding: 0;
             line-height: 1.6;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
         }
-        
+
         header {
-            background-color: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            background-color: #0f0f0f;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
             padding: 1rem 0;
         }
-        
+
         .nav-container {
             display: flex;
             justify-content: space-between;
@@ -44,13 +44,16 @@
             margin: 0 auto;
             padding: 0 2rem;
         }
-        
+
         .logo {
             font-weight: 600;
             font-size: 1.5rem;
-            color: var(--primary);
+            background: linear-gradient(to right, #9D4EDD, #C77DFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-        
+
         .nav-links a {
             margin-left: 1.5rem;
             text-decoration: none;
@@ -58,11 +61,11 @@
             font-weight: 500;
             transition: color 0.3s;
         }
-        
+
         .nav-links a:hover {
             color: var(--primary);
         }
-        
+
         .btn {
             display: inline-block;
             padding: 0.5rem 1.5rem;
@@ -71,68 +74,72 @@
             text-decoration: none;
             transition: all 0.3s;
         }
-        
+
         .btn-primary {
-            background-color: var(--primary);
+            background: linear-gradient(to right, #6A0DAD, #3A006D);
             color: white;
         }
-        
+
         .btn-primary:hover {
-            background-color: #4338CA;
+            opacity: 0.9;
         }
-        
+
         .btn-outline {
             border: 1px solid var(--primary);
             color: var(--primary);
         }
-        
+
         .btn-outline:hover {
-            background-color: #EEF2FF;
+            background-color: rgba(157, 78, 221, 0.1);
         }
-        
+
         .hero {
             text-align: center;
             padding: 4rem 0;
         }
-        
+
         .hero h1 {
             font-size: 3rem;
             font-weight: 700;
-            color: var(--dark);
+            background: linear-gradient(to right, #9D4EDD, #C77DFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             margin-bottom: 1rem;
         }
-        
+
         .hero p {
             font-size: 1.25rem;
             max-width: 700px;
             margin: 0 auto 2rem;
-            color: var(--text);
+            color: #d1d5db;
         }
-        
+
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             margin: 4rem 0;
         }
-        
+
         .feature-card {
-            background: white;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid #3A006D;
             border-radius: 0.5rem;
             padding: 2rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
             transition: transform 0.3s, box-shadow 0.3s;
         }
-        
+
         .feature-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5);
         }
-        
+
         .feature-icon {
             width: 3rem;
             height: 3rem;
-            background-color: #E0E7FF;
+            background-color: #2A003F;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -141,21 +148,21 @@
             color: var(--primary);
             font-size: 1.5rem;
         }
-        
+
         .feature-card h3 {
             font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 1rem;
-            color: var(--dark);
+            color: #EDEDEC;
         }
-        
+
         footer {
-            background-color: var(--dark);
-            color: white;
+            background-color: #1A1A1A;
+            color: #CCCCCC;
             padding: 3rem 0;
             margin-top: 4rem;
         }
-        
+
         .footer-content {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -164,58 +171,58 @@
             margin: 0 auto;
             padding: 0 2rem;
         }
-        
+
         .footer-column h3 {
             font-size: 1.125rem;
             font-weight: 600;
             margin-bottom: 1rem;
             color: white;
         }
-        
+
         .footer-column ul {
             list-style: none;
             padding: 0;
         }
-        
+
         .footer-column ul li {
             margin-bottom: 0.5rem;
         }
-        
+
         .footer-column ul li a {
-            color: #D1D5DB;
+            color: #aaa;
             text-decoration: none;
             transition: color 0.3s;
         }
-        
+
         .footer-column ul li a:hover {
             color: white;
         }
-        
+
         .copyright {
             text-align: center;
             padding-top: 2rem;
             margin-top: 2rem;
-            border-top: 1px solid #374151;
-            color: #9CA3AF;
+            border-top: 1px solid #333;
+            color: #777;
         }
-        
+
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2rem;
             }
-            
+
             .hero p {
                 font-size: 1rem;
             }
-            
+
             .nav-container {
                 flex-direction: column;
             }
-            
+
             .nav-links {
                 margin-top: 1rem;
             }
-            
+
             .nav-links a {
                 margin: 0 0.75rem;
             }
@@ -223,6 +230,7 @@
     </style>
 </head>
 <body>
+<!-- CONTENIDO TUYO ORIGINAL AQUÍ (NO SE MODIFICÓ) -->
     <header>
         <div class="nav-container">
             <div class="logo">Goxu</div>
@@ -231,8 +239,9 @@
                 <a href="#mission">Misión</a>
                 <a href="#vision">Visión</a>
                 <a href="#values">Valores</a>
-                <a href="#" class="btn btn-outline">Iniciar sesión</a>
-                <a href="#" class="btn btn-primary">Registrarse</a>
+                <a href="/login" class="btn btn-outline">Iniciar sesión</a>
+<a href="/register" class="btn btn-primary">Registrarse</a>
+
             </div>
         </div>
     </header>
