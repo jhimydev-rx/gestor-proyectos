@@ -31,7 +31,12 @@
     <div class="bg-[#1A0033] rounded-xl border border-[#6A0DAD] shadow p-6 mb-8">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-2xl font-bold text-[#E0AAFF]"><i class="fas fa-code-branch mr-2"></i>Ramas del proyecto</h2>
-            <a href="#"
+            <a href="{{ route('proyectos.ramas.admin', $proyecto) }}"
+                class="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded-lg font-semibold shadow transition-all duration-300">
+                    <i class="fas fa-tools mr-1"></i> Administrar ramas
+            </a>
+
+            <a href="{{ route('ramas.create', $proyecto) }}"
                class="bg-gradient-to-r from-[#6A0DAD] to-[#9D4EDD] hover:from-[#7B2CBF] hover:to-[#B56EFF] text-white px-4 py-2 rounded-lg font-semibold shadow transition-all duration-300">
                 <i class="fas fa-plus-circle mr-1"></i> Crear nueva rama
             </a>

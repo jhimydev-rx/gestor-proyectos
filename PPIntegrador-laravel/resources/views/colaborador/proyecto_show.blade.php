@@ -33,14 +33,29 @@
                             <i class="fas fa-quote-left mr-1 text-xs"></i>{{ $rama->descripcion }}
                         </p>
 
-                        <ul class="list-disc list-inside text-sm text-[#A5FFD6]">
-                            @foreach ($rama->tareas->where('perfil_id', session('perfil_activo')) as $tarea)
-                                <li>
-                                    {{ $tarea->titulo }} -
-                                    <span class="italic text-[#C7B8E0]">{{ $tarea->estado }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
+                        
+
+
+                        @php
+                            $tareas = $tareasPorRama[$rama->id] ?? collect();
+                        @endphp
+
+                        @if ($tareas->isNotEmpty())
+                            <ul class="list-disc list-inside text-sm text-[#A5FFD6]">
+                                @foreach ($tareas as $tarea)
+                                    <li>
+                                        {{ $tarea->titulo }} -
+                                        <span class="italic text-[#C7B8E0]">{{ $tarea->estado }}</span>
+                                        <a href="{{ route('tareas.show', $tarea) }}"
+                                            class="text-violet-300 hover:text-white underline text-sm">
+                                            <i class="fas fa-eye mr-1"></i>Ver tarea
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <p class="text-sm text-[#C7B8E0] italic mt-2">No tienes tareas en esta rama.</p>
+                        @endif
                     </li>
                 @endforeach
             </ul>

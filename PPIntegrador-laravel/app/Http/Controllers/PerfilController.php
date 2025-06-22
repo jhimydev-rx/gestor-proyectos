@@ -56,10 +56,14 @@ class PerfilController extends Controller
 
         $perfil = auth()->user()->perfiles()->findOrFail($request->perfil_id);
 
-        session(['perfil_activo' => $perfil->id]);
+        session([
+            'perfil_activo' => $perfil->id,
+            'perfil_activo_tipo' => $perfil->tipo, // << IMPORTANTE
+        ]);
 
         return redirect()->route($perfil->tipo === 'creador' ? 'panel.creador' : 'panel.colaborador');
     }
+
 
     public function crearOtro()
     {

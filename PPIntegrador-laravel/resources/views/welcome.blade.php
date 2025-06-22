@@ -239,8 +239,29 @@
                 <a href="#mission">Misión</a>
                 <a href="#vision">Visión</a>
                 <a href="#values">Valores</a>
-                <a href="/login" class="btn btn-outline">Iniciar sesión</a>
-<a href="/register" class="btn btn-primary">Registrarse</a>
+                @auth
+                @php
+                    $perfil = session('perfil_activo_tipo');
+                @endphp
+
+
+                    @if ($perfil === 'creador')
+                        <a href="{{ route('panel.creador') }}" class="btn btn-outline">Ir al panel (Creador)</a>
+                    @elseif ($perfil === 'colaborador')
+                        <a href="{{ route('panel.colaborador') }}" class="btn btn-outline">Ir al panel (Colaborador)</a>
+                    @else
+                        <a href="{{ route('perfil.crear') }}" class="btn btn-outline">Completar perfil</a>
+                    @endif
+
+                    <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-primary">Cerrar sesión</button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-outline">Iniciar sesión</a>
+                    <a href="{{ route('register') }}" class="btn btn-primary">Registrarse</a>
+                @endauth
+
 
             </div>
         </div>

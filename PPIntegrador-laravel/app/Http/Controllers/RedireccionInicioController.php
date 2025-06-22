@@ -18,8 +18,13 @@ class RedireccionInicioController extends Controller
 
         if (!$perfil) {
             $perfil = $user->perfiles()->first();
-            session(['perfil_activo' => $perfil->id]);
         }
+
+        // Asegúrate de guardar ambos en sesión
+        session([
+            'perfil_activo' => $perfil->id,
+            'perfil_activo_tipo' => $perfil->tipo,
+        ]);
 
         return redirect()->route($perfil->tipo === 'creador' ? 'panel.creador' : 'panel.colaborador');
     }

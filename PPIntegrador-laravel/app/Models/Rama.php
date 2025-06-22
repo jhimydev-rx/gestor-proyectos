@@ -22,4 +22,10 @@ class Rama extends Model
     {
         return $this->hasMany(Tarea::class);
     }
+
+    public function colaboradores()
+    {
+        return $this->belongsToMany(Perfil::class, 'rama_perfil', 'rama_id', 'perfil_id');
+    }
+
 }
