@@ -72,7 +72,7 @@ class RamaController extends Controller
 
         $rama->update($request->only('nombre', 'descripcion'));
 
-        return redirect()->route('proyectos.ramas.admin', $rama->proyecto_id)
+        return redirect()->route('ramas.admin', $rama->proyecto_id)
                         ->with('success', 'Rama actualizada correctamente.');
     }
 
@@ -82,7 +82,7 @@ class RamaController extends Controller
 
         $rama->delete();
 
-        return redirect()->route('proyectos.ramas.admin', $proyectoId)
+        return redirect()->route('ramas.admin', $proyectoId)
                         ->with('success', 'Rama eliminada correctamente.');
     }
 

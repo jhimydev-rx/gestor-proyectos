@@ -29,7 +29,7 @@
                 Crear rama
             </button>
 
-            <a href="{{ route('ramas.admin', $proyecto) }}"
+            <a href="{{ route('proyectos.ramas.admin', $proyecto) }}"
                class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition">
                 Cancelar
             </a>
