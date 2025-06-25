@@ -1,6 +1,8 @@
 @php
     $perfilId = session('perfil_activo');
     $perfilActivo = auth()->user()?->perfiles->firstWhere('id', $perfilId);
+    $perfilesUsuario = auth()->user()->perfiles;
+    $tiposPerfil = $perfilesUsuario->pluck('tipo')->toArray();
 @endphp
 
 <!-- Navigation Menu -->
@@ -13,25 +15,21 @@
                 <a href="{{ route('inicio') }}" class="flex items-center group relative">
                     <!-- Símbolo: Flor de la vida minimalista -->
                     <svg class="h-12 w-12 mr-2 transition-all duration-500 group-hover:rotate-180" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Círculos entrelazados -->
                         <circle cx="50" cy="50" r="30" stroke="#5B21B6" stroke-width="1.5" stroke-dasharray="2 2"/>
                         <circle cx="35" cy="50" r="15" stroke="#7C3AED" stroke-width="1.2"/>
                         <circle cx="65" cy="50" r="15" stroke="#7C3AED" stroke-width="1.2"/>
-                        <!-- Punto focal -->
                         <circle cx="50" cy="50" r="3" fill="#5B21B6"/>
                     </svg>
 
                     <!-- Tipografía custom -->
                     <div class="relative">
-                        <!-- Efecto de letras superpuestas -->
                         <span class="text-4xl font-bold text-violet-900 tracking-tighter block font-['Arial'] italic">GOXU</span>
                         <span class="text-4xl font-bold text-violet-700 tracking-tighter absolute top-0 left-0.5 font-['Arial'] italic" style="clip-path: inset(0 0 60% 0);">GOXU</span>
                         <span class="text-4xl font-bold text-violet-500 tracking-tighter absolute top-0 left-1 font-['Arial'] italic" style="clip-path: inset(0 0 80% 0);">GOXU</span>
-                        
-                        <!-- Línea dinámica -->
                         <div class="h-0.5 w-0 bg-violet-400 group-hover:w-full transition-all duration-700 origin-left"></div>
                     </div>
                 </a>
+
                 <!-- Links según tipo de perfil (Desktop) -->
                 @if ($perfilActivo)
                     <div class="hidden sm:flex space-x-8">
@@ -53,10 +51,18 @@
 
             <!-- Selector de Perfil + Dropdown (derecha) -->
             <div class="flex items-center space-x-4">
+                <!-- Crear otro perfil si solo tiene uno -->
+                @if (count($tiposPerfil) === 1)
+                    <a href="{{ route('perfil.crear.otro') }}"
+                       class="hidden sm:inline-block bg-violet-600 hover:bg-violet-700 text-white px-3 py-1 rounded-md text-sm transition-all">
+                        Crear otro perfil
+                    </a>
+                @endif
+
                 <!-- Selector de Perfil (SIEMPRE visible) -->
                 <form method="POST" action="{{ route('perfil.cambiar') }}" class="hidden sm:block">
                     @csrf
-                    <select name="perfil_id" onchange="this.form.submit()" 
+                    <select name="perfil_id" onchange="this.form.submit()"
                         class="bg-gray-900 text-white border border-violet-500 rounded-md px-3 py-1 text-sm focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all cursor-pointer">
                         @foreach(Auth::user()->perfiles as $perfil)
                             <option value="{{ $perfil->id }}" {{ session('perfil_activo') == $perfil->id ? 'selected' : '' }}>
@@ -107,10 +113,17 @@
     <!-- Menú Mobile -->
     <div :class="{ 'block': open, 'hidden': !open }" class="sm:hidden bg-gray-900/95 border-t border-violet-600/50">
         <div class="px-4 py-3 space-y-3">
+            <!-- Crear otro perfil (Mobile) -->
+            @if (count($tiposPerfil) === 1)
+                <x-responsive-nav-link :href="route('perfil.crear.otro')" class="text-white hover:bg-violet-900/50">
+                    {{ __('Crear otro perfil') }}
+                </x-responsive-nav-link>
+            @endif
+
             <!-- Selector de Perfil (Mobile) -->
             <form method="POST" action="{{ route('perfil.cambiar') }}">
                 @csrf
-                <select name="perfil_id" onchange="this.form.submit()" 
+                <select name="perfil_id" onchange="this.form.submit()"
                     class="w-full bg-gray-800 text-white border border-violet-500 rounded-md px-3 py-2 text-sm">
                     @foreach(Auth::user()->perfiles as $perfil)
                         <option value="{{ $perfil->id }}" {{ session('perfil_activo') == $perfil->id ? 'selected' : '' }}>
