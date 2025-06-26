@@ -24,7 +24,14 @@
                     class="w-full bg-[#1A0033] text-white border border-[#9D4EDD] rounded-lg p-3 focus:ring-2 focus:ring-[#9D4EDD] focus:border-transparent">{{ old('descripcion', $rama->descripcion) }}</textarea>
             </div>
 
-            <div class="flex justify-end">
+            <div class="flex justify-between">
+                <!-- Botón Cancelar -->
+                <a href="{{ route('proyectos.ramas.admin', $rama->proyecto_id) }}"
+                   class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i>Cancelar
+                </a>
+
+                <!-- Botón Guardar -->
                 <button type="submit"
                     class="bg-[#6A0DAD] hover:bg-[#7B2CBF] text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center">
                     <i class="fas fa-save mr-2"></i> Guardar cambios
