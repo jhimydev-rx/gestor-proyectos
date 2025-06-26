@@ -24,9 +24,9 @@
             <label class="block mb-2 font-semibold text-[#E0AAFF]">Tipo de perfil</label>
             {{-- Etiqueta del campo "Tipo de perfil" --}}
             <select name="tipo" required
-                    class="w-full bg-[#3A006D] border border-[#9D4EDD] text-white p-3 rounded-xl focus:ring-2 focus:ring-[#C77DFF] transition-all duration-300"
+                    class="w-full bg-[#2B0039] border border-[#9D4EDD] text-white p-3 rounded-xl focus:ring-2 focus:ring-[#C77DFF] transition-all duration-300"
                     @if(isset($tipoPredefinido)) disabled @endif>
-                {{-- Campo de selección para el tipo de perfil: ancho completo, fondo oscuro, borde púrpura de show.blade.php, texto blanco, padding, redondeado. Deshabilitado si el tipo ya está predefinido. --}}
+                {{-- Campo de selección para el tipo de perfil: fondo oscuro, borde púrpura, texto blanco, transición suave --}}
                 <option value="">Selecciona un tipo</option>
                 <option value="creador" {{ old('tipo', $tipoPredefinido ?? '') === 'creador' ? 'selected' : '' }}>Creador</option>
                 <option value="colaborador" {{ old('tipo', $tipoPredefinido ?? '') === 'colaborador' ? 'selected' : '' }}>Colaborador</option>
@@ -46,13 +46,12 @@
             <label class="block mb-2 font-semibold text-[#E0AAFF]">Nombre del perfil</label>
             {{-- Etiqueta del campo "Nombre del perfil" --}}
             <input type="text" name="nombre_perfil" required
-                   class="w-full bg-[#3A006D] border border-[#9D4EDD] text-white p-3 rounded-xl focus:ring-2 focus:ring-[#C77DFF] transition-all duration-300"
+                   class="w-full bg-[#2B0039] border border-[#9D4EDD] text-white p-3 rounded-xl focus:ring-2 focus:ring-[#C77DFF] transition-all duration-300"
                    value="{{ old('nombre_perfil') }}">
-            {{-- Campo de texto para el nombre del perfil: ancho completo, fondo oscuro, borde púrpura de show.blade.php, texto blanco, padding, redondeado. Mantiene el valor antiguo si falla la validación. --}}
+            {{-- Campo de texto con fondo oscuro y estilo adaptado --}}
             @error('nombre_perfil')
                 <p class="text-red-400 text-sm mt-2">{{ $message }}</p>
             @enderror
-            {{-- Muestra errores de validación para el campo 'nombre_perfil' --}}
         </div>
 
         {{-- Bio --}}
@@ -60,12 +59,11 @@
             <label class="block mb-2 font-semibold text-[#E0AAFF]">Biografía (opcional)</label>
             {{-- Etiqueta del campo "Biografía" --}}
             <textarea name="bio" rows="4"
-                      class="w-full bg-[#3A006D] border border-[#9D4EDD] text-white p-3 rounded-xl focus:ring-2 focus:ring-[#C77DFF] transition-all duration-300">{{ old('bio') }}</textarea>
-            {{-- Campo de área de texto para la biografía: ancho completo, fondo oscuro, borde púrpura de show.blade.php, texto blanco, padding, redondeado. Mantiene el valor antiguo. --}}
+                      class="w-full bg-[#2B0039] border border-[#9D4EDD] text-white p-3 rounded-xl focus:ring-2 focus:ring-[#C77DFF] transition-all duration-300">{{ old('bio') }}</textarea>
+            {{-- Campo de texto grande para biografía, con fondo y bordes coherentes --}}
             @error('bio')
                 <p class="text-red-400 text-sm mt-2">{{ $message }}</p>
             @enderror
-            {{-- Muestra errores de validación para el campo 'bio' --}}
         </div>
 
         {{-- Foto --}}
@@ -73,12 +71,11 @@
             <label class="block mb-2 font-semibold text-[#E0AAFF]">Foto de perfil (opcional)</label>
             {{-- Etiqueta del campo "Foto de perfil" --}}
             <input type="file" name="foto" accept="image/*"
-                   class="w-full bg-[#3A006D] border border-[#9D4EDD] text-white p-3 rounded-xl file:cursor-pointer file:text-sm file:bg-[#6A0DAD] file:text-white file:rounded-md transition-all duration-300">
-            {{-- Campo de entrada de archivo para la foto: ancho completo, fondo oscuro, borde púrpura de show.blade.php. Estilos para el botón de seleccionar archivo. --}}
+                   class="w-full bg-[#2B0039] border border-[#9D4EDD] text-white p-3 rounded-xl file:cursor-pointer file:text-sm file:bg-[#6A0DAD] file:text-white file:rounded-md transition-all duration-300">
+            {{-- Campo de subida con estilos personalizados para el botón de archivo --}}
             @error('foto')
                 <p class="text-red-400 text-sm mt-2">{{ $message }}</p>
             @enderror
-            {{-- Muestra errores de validación para el campo 'foto' --}}
         </div>
 
         {{-- Botón --}}
@@ -87,7 +84,7 @@
                     class="bg-gradient-to-r from-[#9D4EDD] to-[#6A0DAD] hover:from-[#7B2CBF] hover:to-[#5F3DC4] text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-2xl transition duration-300">
                 Crear Perfil
             </button>
-            {{-- Botón de envío del formulario: gradiente de púrpura de show.blade.php, texto blanco, padding, redondeado, negrita, sombras, transiciones. --}}
+            {{-- Botón de envío del formulario con gradiente y transiciones suaves --}}
         </div>
     </form>
 </div>

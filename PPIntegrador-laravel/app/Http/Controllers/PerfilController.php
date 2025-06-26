@@ -11,6 +11,18 @@ class PerfilController extends Controller
     // Mostrar formulario de creación
     public function create()
     {
+        // Suponiendo que estás usando autenticación
+        $usuario = auth()->user();
+
+        // Verificamos cuántos perfiles tiene el usuario
+        $cantidadPerfiles = $usuario->perfiles()->count();
+
+        // Si ya tiene 2 perfiles, lo redirigimos con un mensaje de error
+        if ($cantidadPerfiles >= 2) {
+            return redirect()->route('inicio')->with('error', 'No puedes crear más de 2 perfiles.');
+        }
+
+        // Si no tiene 2 perfiles, se muestra la vista de creación
         return view('perfil.crear');
     }
 
@@ -39,13 +51,18 @@ class PerfilController extends Controller
         ]);
 
         // Guardar perfil activo en sesión
-        session(['perfil_activo' => $perfil->id]);
+        session([
+            'perfil_activo' => $perfil->id,
+            'perfil_activo_tipo' => $perfil->tipo
+        ]);
+        session()->save(); // Asegura que la sesión se guarde antes de redirigir
 
         // Redirigir al panel correspondiente
         return redirect()->route(
             $perfil->tipo === 'creador' ? 'panel.creador' : 'panel.colaborador'
         )->with('success', 'Perfil creado y activado correctamente.');
     }
+
 
     // (Opcional) Cambiar perfil activo desde dropdown
     public function cambiar(Request $request)

@@ -1,43 +1,52 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-3xl mx-auto bg-white p-6 mt-10 rounded shadow text-black">
-    <h2 class="text-xl font-bold mb-4">Crear nueva tarea para la rama: {{ $rama->nombre }}</h2>
+<div class="max-w-3xl mx-auto mt-10 space-y-6 text-white">
+    <h1 class="text-2xl font-bold text-violet-300">
+        Crear nueva tarea para la rama: {{ $rama->nombre }}
+    </h1>
 
-    <form action="{{ route('tareas.store', $rama) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('tareas.store', $rama) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
 
-        <div class="mb-4">
-            <label for="titulo" class="block text-sm font-medium">Título</label>
-            <input type="text" name="titulo" id="titulo" required class="w-full border px-3 py-2 rounded">
+        <div>
+            <label for="titulo" class="block text-sm font-medium text-gray-300">Título</label>
+            <input type="text" name="titulo" id="titulo" required
+                   class="w-full mt-1 bg-gray-800 text-white border border-violet-500 rounded p-2">
         </div>
 
-        <div class="mb-4">
-            <label for="descripcion" class="block text-sm font-medium">Descripción</label>
-            <textarea name="descripcion" id="descripcion" rows="3" class="w-full border px-3 py-2 rounded"></textarea>
+        <div>
+            <label for="descripcion" class="block text-sm font-medium text-gray-300">Descripción</label>
+            <textarea name="descripcion" id="descripcion" rows="3"
+                      class="w-full mt-1 bg-gray-800 text-white border border-violet-500 rounded p-2"></textarea>
         </div>
 
-        <div class="mb-4">
-            <label for="fecha_limite" class="block text-sm font-medium">Fecha límite</label>
-            <input type="date" name="fecha_limite" id="fecha_limite" class="w-full border px-3 py-2 rounded">
+        <div>
+            <label for="fecha_limite" class="block text-sm font-medium text-gray-300">Fecha límite</label>
+            <input type="date" name="fecha_limite" id="fecha_limite"
+                   class="w-full mt-1 bg-gray-800 text-white border border-violet-500 rounded p-2">
         </div>
 
-        <div class="mb-6">
-            <label for="archivo" class="block text-sm font-medium">Archivo plantilla (opcional)</label>
-            <input type="file" name="archivo" id="archivo" class="w-full mt-1">
-            <p class="text-xs text-gray-600 mt-1">Puedes subir un documento o recurso base para la tarea.</p>
+        <div>
+            <label for="archivo" class="block text-sm font-medium text-gray-300">Archivo plantilla (opcional)</label>
+            <input type="file" name="archivo" id="archivo"
+                   class="w-full mt-1 bg-gray-800 text-white border border-violet-500 rounded p-2">
+            <p class="text-xs text-purple-300 mt-1">Puedes subir un documento o recurso base para la tarea.</p>
         </div>
 
-        <div class="flex gap-4">
+        <div>
+            <label for="comentario" class="block text-sm font-medium text-gray-300">Comentario (opcional)</label>
+            <textarea name="comentario" id="comentario" rows="2"
+                      class="w-full mt-1 bg-gray-800 text-white border border-violet-500 rounded p-2"></textarea>
+        </div>
+
+        <div class="flex justify-between mt-6">
+            <a href="{{ route('proyectos.ramas.admin', $rama->proyecto) }}"
+               class="text-violet-400 hover:text-violet-300">Cancelar</a>
             <button type="submit"
-                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition">
+                    class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded">
                 Crear tarea
             </button>
-
-            <a href="{{ route('proyectos.ramas.admin', $rama->proyecto) }}"
-               class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition">
-                Cancelar
-            </a>
         </div>
     </form>
 </div>

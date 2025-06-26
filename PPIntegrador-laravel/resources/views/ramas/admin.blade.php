@@ -70,5 +70,12 @@
         <p class="text-[#C7B8E0]"><i class="fas fa-info-circle mr-1"></i>Este proyecto no tiene ramas aún.</p>
     @endforelse
 
+    <!-- Botón para regresar al proyecto -->
+    <div class="mt-10 text-center">
+        <a href="{{ route('proyectos.show', $proyecto) }}"
+           class="inline-block bg-gradient-to-r from-[#6A0DAD] to-[#9D4EDD] hover:from-[#7B2CBF] hover:to-[#B56EFF] text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300">
+            <i class="fas fa-arrow-left mr-2"></i> Volver
+        </a>
+    </div>
 </div>
 @endsection

@@ -1,39 +1,40 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-3xl mx-auto bg-white p-6 mt-10 rounded shadow text-black">
-    <h2 class="text-xl font-bold mb-4">Crear nueva rama para: {{ $proyecto->titulo }}</h2>
+<div class="max-w-3xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+    <!-- Crear Rama -->
+    <div class="bg-[#1A0033] rounded-xl border border-[#6A0DAD] shadow-lg p-6">
+        <h1 class="text-2xl font-bold text-[#E0AAFF] mb-6 flex items-center">
+            <i class="fas fa-code-branch mr-2"></i>Crear Rama para: {{ $proyecto->titulo }}
+        </h1>
 
-    <form action="{{ route('ramas.store', $proyecto) }}" method="POST" enctype="multipart/form-data">
-        @csrf
+        <form action="{{ route('ramas.store', $proyecto) }}" method="POST">
+            @csrf
 
-        <div class="mb-4">
-            <label for="nombre" class="block text-sm font-medium">Nombre de la rama</label>
-            <input type="text" name="nombre" id="nombre" required class="w-full border px-3 py-2 rounded">
-        </div>
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-2 text-[#E0AAFF]">Nombre</label>
+                <input type="text" name="nombre" required
+                       class="w-full bg-[#1A0033] text-white border border-[#9D4EDD] rounded-lg p-3 focus:ring-2 focus:ring-[#9D4EDD] focus:border-transparent">
+            </div>
 
-        <div class="mb-4">
-            <label for="descripcion" class="block text-sm font-medium">Descripción</label>
-            <textarea name="descripcion" id="descripcion" rows="3" class="w-full border px-3 py-2 rounded"></textarea>
-        </div>
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-2 text-[#E0AAFF]">Descripción</label>
+                <textarea name="descripcion" rows="4"
+                          class="w-full bg-[#1A0033] text-white border border-[#9D4EDD] rounded-lg p-3 focus:ring-2 focus:ring-[#9D4EDD] focus:border-transparent"></textarea>
+            </div>
 
-        <div class="mb-6">
-            <label for="archivo" class="block text-sm font-medium">Archivo (opcional)</label>
-            <input type="file" name="archivo" id="archivo" class="w-full mt-1">
-            <p class="text-xs text-gray-600 mt-1">Puedes subir un documento o archivo relacionado a la rama (opcional).</p>
-        </div>
+            <div class="flex justify-between mt-6">
+                <a href="{{ route('proyectos.ramas.admin', $proyecto) }}"
+                   class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i>Cancelar
+                </a>
 
-        <div class="flex gap-4">
-            <button type="submit"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition">
-                Crear rama
-            </button>
-
-            <a href="{{ route('ramas.admin', $proyecto) }}"
-               class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition">
-                Cancelar
-            </a>
-        </div>
-    </form>
+                <button type="submit"
+                        class="bg-[#6A0DAD] hover:bg-[#7B2CBF] text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center">
+                    <i class="fas fa-plus-circle mr-2"></i>Crear Rama
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 @endsection

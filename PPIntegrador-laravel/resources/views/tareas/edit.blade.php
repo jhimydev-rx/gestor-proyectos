@@ -40,6 +40,32 @@
             <p class="text-xs text-purple-300 mt-1">Usa Ctrl o Shift para seleccionar múltiples.</p>
         </div>
 
+        @if ($tarea->archivos->isNotEmpty())
+            <div class="mt-6">
+                <label class="block text-sm font-medium text-gray-300 mb-2">Archivos plantilla ya subidos:</label>
+
+                <ul class="space-y-2">
+                    @foreach ($tarea->archivos as $archivo)
+                        <li class="bg-gray-800 border border-violet-500 rounded p-3 flex justify-between items-center">
+                            <div>
+                                <p class="text-white font-semibold">
+                                    <i class="fas fa-file-alt mr-1 text-violet-400"></i>{{ $archivo->archivo }}
+                                </p>
+                                @if ($archivo->comentario)
+                                    <p class="text-sm text-gray-300 mt-1 italic">💬 {{ $archivo->comentario }}</p>
+                                @endif
+                            </div>
+                            <a href="{{ asset('storage/tareas/' . $tarea->id . '/' . $archivo->archivo) }}" 
+                               class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-1 rounded text-sm transition"
+                               target="_blank">
+                                Descargar
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="flex justify-between mt-6">
             <a href="{{ route('proyectos.show', $tarea->rama->proyecto_id) }}"
                class="text-violet-400 hover:text-violet-300">Cancelar</a>

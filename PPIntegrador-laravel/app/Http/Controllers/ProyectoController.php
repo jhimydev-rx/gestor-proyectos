@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Proyecto;
-use App\Models\Tarea;
-use App\Models\Rama;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProyectoController extends Controller
 {
@@ -13,7 +12,6 @@ class ProyectoController extends Controller
     public function index()
     {
         $perfilId = session('perfil_activo');
-
         $proyectos = Proyecto::where('perfil_id', $perfilId)->get();
 
         return view('proyectos.index', compact('proyectos'));
@@ -45,14 +43,9 @@ class ProyectoController extends Controller
     // Mostrar detalle de un proyecto
     public function show(Proyecto $proyecto)
     {
-        // Obtener colaboradores asociados directamente al proyecto
         $colaboradores = $proyecto->colaboradores()->get();
-
         return view('proyectos.show', compact('proyecto', 'colaboradores'));
     }
-
-
-
 
     // Mostrar formulario para editar un proyecto
     public function edit(Proyecto $proyecto)
@@ -81,26 +74,22 @@ class ProyectoController extends Controller
         return redirect()->route('proyectos.index')->with('success', 'Proyecto eliminado');
     }
 
-        // ProyectoController.php
+    // Formulario para agregar colaborador
     public function agregarColaboradorForm(Proyecto $proyecto)
     {
-        // Solo perfiles tipo 'colaborador'
         $colaboradores = \App\Models\Perfil::where('tipo', 'colaborador')->get();
-
         return view('proyectos.agregar_colaborador', compact('proyecto', 'colaboradores'));
     }
 
+    // Agregar colaborador al proyecto
     public function agregarColaborador(Request $request, Proyecto $proyecto)
     {
         $request->validate([
             'perfil_id' => 'required|exists:perfiles,id',
         ]);
 
-        // Adjuntar sin duplicar
         $proyecto->colaboradores()->syncWithoutDetaching([$request->perfil_id]);
 
         return redirect()->back()->with('success', 'Colaborador agregado');
     }
-
-
 }

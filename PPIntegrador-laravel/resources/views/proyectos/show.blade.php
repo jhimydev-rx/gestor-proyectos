@@ -79,6 +79,14 @@
             @endforelse
         </ul>
     </div>
+
+    <!-- Botón para regresar -->
+    <div class="mt-10 text-center">
+        <a href="{{ route('proyectos.index') }}"
+           class="inline-block bg-gradient-to-r from-[#6A0DAD] to-[#9D4EDD] hover:from-[#7B2CBF] hover:to-[#B56EFF] text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300">
+            <i class="fas fa-arrow-left mr-2"></i> Regresar a proyectos
+        </a>
+    </div>
 </div>
 
 <!-- Font Awesome -->
