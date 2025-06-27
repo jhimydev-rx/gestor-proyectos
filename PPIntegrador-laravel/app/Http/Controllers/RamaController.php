@@ -16,6 +16,8 @@ class RamaController extends Controller
         return view('ramas.create', compact('proyecto', 'colaboradores'));
     }
 
+
+
     // Guardar rama
     public function store(Request $request, Proyecto $proyecto)
     {
@@ -153,4 +155,7 @@ class RamaController extends Controller
 
         return back()->with('error', 'Archivo no encontrado.');
     }
+
+    
+   
 }

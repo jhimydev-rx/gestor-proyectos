@@ -92,4 +92,45 @@ class ProyectoController extends Controller
 
         return redirect()->back()->with('success', 'Colaborador agregado');
     }
+
+    //Barras de progreso
+     public function adminShow(Proyecto $proyecto)
+    {
+        $proyecto->load('ramas.tareas'); // cargamos ramas y tareas
+
+        $progreso = [];
+
+        foreach ($proyecto->ramas as $rama) {
+            $total = $rama->tareas->count();
+            $completadas = $rama->tareas->where('estado', 'completada')->count();
+
+            $progreso[$rama->id] = $total > 0 ? round(($completadas / $total) * 100) : 0;
+        }
+
+        return view('admin.proyectos.show', compact('proyecto', 'progreso'));
+    }
+
+    public function vistaArbol(Proyecto $proyecto)
+    {
+        $ramas = $proyecto->ramas()->with('tareas')->get();
+
+        $datos = [
+            'name' => $proyecto->nombre,
+            'children' => $ramas->map(function ($rama) {
+                return [
+                    'name' => $rama->nombre,
+                    'children' => $rama->tareas->map(function ($tarea) {
+                        return [
+                            'name' => $tarea->titulo,
+                            'estado' => $tarea->estado,
+                        ];
+                    }),
+                ];
+            }),
+        ];
+
+        return view('proyectos.arbol', ['arbolDatos' => $datos]);
+    }
+
+
 }

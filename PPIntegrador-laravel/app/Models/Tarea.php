@@ -10,7 +10,7 @@ class Tarea extends Model
     use HasFactory;
 
     protected $fillable = [
-        'rama_id', 'titulo', 'descripcion', 'fecha_limite',
+        'rama_id', 'titulo', 'descripcion', 'fecha_limite','estado',
     ];
 
 

@@ -10,4 +10,5 @@ class PanelCreadorController extends Controller
     {
         return view('panel.creador');
     }
+
 }

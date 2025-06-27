@@ -32,4 +32,23 @@ class ArchivoController extends Controller
 
         return back()->with('success', 'Archivo subido correctamente.');
     }
+
+    public function destroy(\App\Models\Tarea $tarea, \App\Models\Archivo $archivo)
+    {
+        // Puedes validar que el archivo pertenezca a la tarea
+        if ($archivo->tarea_id !== $tarea->id) {
+            abort(403, 'Archivo no pertenece a la tarea');
+        }
+
+        // Elimina el archivo del storage (si deseas)
+        if (\Storage::disk('public')->exists($archivo->ruta)) {
+            \Storage::disk('public')->delete($archivo->ruta);
+        }
+
+        // Elimina el registro
+        $archivo->delete();
+
+        return redirect()->back()->with('success', 'Archivo eliminado correctamente.');
+    }
+
 }

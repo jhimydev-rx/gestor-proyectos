@@ -15,11 +15,15 @@ class SocialLoginController extends Controller
 
     public function handleGithubCallback()
     {
-        $githubUser = Socialite::driver('github')->user();
+        // Solución temporal con stateless()
+        $githubUser = Socialite::driver('github')->stateless()->user();
 
         $user = User::firstOrCreate(
-            ['email' => $githubUser->getEmail()],
-            ['name' => $githubUser->getName() ?? $githubUser->getNickname()]
+          ['email' => $githubUser->getEmail()],
+                [
+                    'name' => $githubUser->getName() ?? $githubUser->getNickname(),
+                    'password' => bcrypt('github_fake_password') // ← campo requerido
+                ]
         );
 
         Auth::login($user);
@@ -34,12 +38,16 @@ class SocialLoginController extends Controller
 
     public function handleGoogleCallback()
     {
-        $googleUser = Socialite::driver('google')->user();
+        // Solución temporal con stateless()
+        $googleUser = Socialite::driver('google')->stateless()->user();
 
-        $user = User::firstOrCreate(
+         $user = User::firstOrCreate(
             ['email' => $googleUser->getEmail()],
-            ['name' => $googleUser->getName()]
-        );
+            [
+                'name' => $googleUser->getName(),
+                'password' => bcrypt('google_fake_password') // ← campo requerido
+            ]
+);
 
         Auth::login($user);
 

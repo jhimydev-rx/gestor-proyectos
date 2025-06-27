@@ -39,19 +39,19 @@ class TareaController extends Controller
 
         // Procesar archivo si se subió
         if ($request->hasFile('archivo')) {
-    $perfilId = session('perfil_activo');
+        $perfilId = session('perfil_activo');
 
-    if ($perfilId) {
-        $ruta = $request->file('archivo')->store('tareas', 'public');
+            if ($perfilId) {
+                $ruta = $request->file('archivo')->store('tareas', 'public');
 
-        Archivo::create([
-            'tarea_id' => $tarea->id,
-            'perfil_id' => $perfilId,
-            'archivo' => $ruta,
-            'comentario' => $request->comentario,
-        ]);
-    }
-}
+                Archivo::create([
+                    'tarea_id' => $tarea->id,
+                    'perfil_id' => $perfilId,
+                    'archivo' => $ruta,
+                    'comentario' => $request->comentario,
+                ]);
+            }
+        }
 
         return redirect()->route('proyectos.ramas.admin', $rama->proyecto)
                          ->with('success', 'Tarea y archivo plantilla guardados correctamente.');
@@ -103,17 +103,62 @@ class TareaController extends Controller
         return view('tareas.show', compact('tarea'));
     }
 
-    public function destroy(Tarea $tarea)
-{
-    // Elimina los archivos relacionados, si deseas limpiar archivos
-    foreach ($tarea->archivos as $archivo) {
-        \Storage::disk('public')->delete($archivo->archivo);
-        $archivo->delete();
+    public function adminShow(Tarea $tarea)
+    {
+        $tarea->load(['rama.proyecto', 'colaboradores']); // <--- importante
+
+        $colaboradores = $tarea->rama->proyecto->colaboradores;
+
+        return view('tareas.admin-show', [
+            'tarea' => $tarea,
+            'colaboradores' => $colaboradores
+        ]);
     }
 
-    $tarea->delete();
 
-    return back()->with('success', 'Tarea eliminada correctamente.');
-}
+    public function destroy(Tarea $tarea)
+    {
+        // Elimina los archivos relacionados, si deseas limpiar archivos
+        foreach ($tarea->archivos as $archivo) {
+            \Storage::disk('public')->delete($archivo->archivo);
+            $archivo->delete();
+        }
+
+        $tarea->delete();
+
+        return back()->with('success', 'Tarea eliminada correctamente.');
+    }
+
+    public function cambiarEstado(Tarea $tarea)
+    {
+        $perfilId = session('perfil_activo');
+
+        
+
+        if ($tarea->estado === 'pendiente') {
+            $tarea->estado = 'en_proceso';
+        } elseif ($tarea->estado === 'en_proceso') {
+            $tarea->estado = 'completada';
+        }
+
+        $tarea->save();
+
+        return redirect()->back()->with('success', 'Estado de la tarea actualizado.');
+    }
+
+    public function cambiarEstadoAdmin(Tarea $tarea)
+    {
+        $nuevoEstado = request('estado');
+
+        if (in_array($nuevoEstado, ['pendiente', 'en_proceso', 'completada'])) {
+            $tarea->estado = $nuevoEstado;
+            $tarea->save();
+            return redirect()->back()->with('success', 'Estado actualizado por el admin.');
+        }
+
+        return redirect()->back()->with('error', 'Estado no válido.');
+    }
+
+
 
 }

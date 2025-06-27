@@ -11,7 +11,37 @@
         {{-- Información de la tarea --}}
         <div class="space-y-2 text-[#EEDCFF]">
             <p><strong>📄 Descripción:</strong> {{ $tarea->descripcion }}</p>
-            <p><strong>✅ Estado:</strong> {{ $tarea->estado }}</p>
+            <p><strong>✅ Estado:</strong>
+                <span class="
+                    @if($tarea->estado == 'pendiente') text-yellow-400
+                    @elseif($tarea->estado == 'en_proceso') text-blue-400
+                    @else text-green-400
+                    @endif font-semibold">
+                    {{ ucfirst(str_replace('_', ' ', $tarea->estado)) }}
+                </span>
+            </p>
+
+
+                        {{-- Botón para cambiar estado --}}
+            @if ($tarea->estado !== 'completada')
+                <form action="{{ route('tareas.cambiarEstado', $tarea->id) }}" method="POST" class="mt-4">
+                    @csrf
+                    @method('PATCH')
+
+                    <button type="submit"
+                            class="bg-gradient-to-r from-[#7B2CBF] to-[#9D4EDD] hover:from-[#5A189A] hover:to-[#7B2CBF] text-white px-4 py-2 rounded-lg shadow font-semibold transition-all">
+                        <i class="fas fa-sync-alt mr-2"></i>
+                        Marcar como 
+                        @if ($tarea->estado === 'pendiente')
+                            En proceso
+                        @elseif ($tarea->estado === 'en_proceso')
+                            Completada
+                        @endif
+                    </button>
+                </form>
+            @endif
+
+
             <p><strong>📅 Fecha límite:</strong> {{ $tarea->fecha_limite }}</p>
         </div>
 

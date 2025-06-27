@@ -58,12 +58,23 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/ramas/{rama}/archivos/{archivo}', [RamaController::class, 'eliminarArchivo'])->name('ramas.archivos.eliminar');
 
             Route::get('/proyectos/{proyecto}/ramas/admin', [RamaController::class, 'admin'])->name('proyectos.ramas.admin');
+            //Barra de progreso
+            Route::get('/proyectos/{proyecto}', [ProyectoController::class, 'adminShow'])->name('proyectos.admin.show');
+
 
             Route::get('/ramas/{rama}/tareas/crear', [TareaController::class, 'create'])->name('tareas.create');
             Route::post('/ramas/{rama}/tareas', [TareaController::class, 'store'])->name('tareas.store');
             Route::get('/tareas/{tarea}/editar', [TareaController::class, 'edit'])->name('tareas.edit');
             Route::put('/tareas/{tarea}', [TareaController::class, 'update'])->name('tareas.update');
             Route::delete('/tareas/{tarea}', [TareaController::class, 'destroy'])->name('tareas.destroy');
+            Route::patch('/admin/tareas/{tarea}/cambiar-estado', [TareaController::class, 'cambiarEstadoAdmin'])->name('admin.tareas.cambiarEstado');
+            Route::delete('/tareas/{tarea}/archivos/{archivo}', [ArchivoController::class, 'destroy'])->name('tareas.archivos.destroy');
+            Route::get('/admin/tareas/{tarea}', [TareaController::class, 'adminShow'])->name('admin.tareas.show');
+
+            //Arbol
+            Route::get('/proyectos/{proyecto}/arbol', [ProyectoController::class, 'vistaArbol'])->name('proyectos.arbol');
+
+
         });
 
         Route::middleware([SoloColaborador::class])->group(function () {
@@ -73,6 +84,8 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('/tareas/{tarea}', [TareaController::class, 'show'])->name('tareas.show');
             Route::post('/tareas/{tarea}/archivos', [ArchivoController::class, 'store'])->name('tareas.archivos.store');
+            Route::patch('/tareas/{tarea}/cambiar-estado', [TareaController::class, 'cambiarEstado'])->name('tareas.cambiarEstado');
+
         });
 
         Route::get('/proyectos/{proyecto}', [ProyectoController::class, 'show'])->name('proyectos.show');
