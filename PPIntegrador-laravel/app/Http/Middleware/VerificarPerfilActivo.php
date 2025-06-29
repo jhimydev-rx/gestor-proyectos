@@ -31,7 +31,7 @@ class VerificarPerfilActivo
             ]);
 
             // Redirigir al panel correspondiente
-            return $this->redirigirPorTipo($primerPerfil->tipo);
+            //return $this->redirigirPorTipo($primerPerfil->tipo);
         }
 
         return $next($request);

@@ -1,216 +1,299 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-white">
-    <div class="flex justify-between items-center flex-wrap gap-4 mb-6">
+<div class="max-w-6xl mx-auto py-8 text-white">
+    <!-- Header con breadcrumbs y acciones -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
-            <h1 class="text-3xl font-bold text-[#E0AAFF]">
-                <i class="fas fa-tasks mr-2"></i> Detalle Administrativo de Tarea
+            <nav class="flex" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="{{ route('proyectos.index') }}" class="inline-flex items-center text-sm font-medium text-[#C7B8E0] hover:text-[#E0AAFF]">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                            Proyectos
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6 text-[#9D4EDD]" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                            <a href="{{ route('proyectos.show', $tarea->rama->proyecto) }}" class="ml-1 text-sm font-medium text-[#C7B8E0] hover:text-[#E0AAFF] md:ml-2">{{ Str::limit($tarea->rama->proyecto->titulo, 20) }}</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6 text-[#E0AAFF]" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                            <span class="ml-1 text-sm font-medium text-[#E0AAFF] md:ml-2">Tarea: {{ Str::limit($tarea->titulo, 25) }}</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+            <h1 class="mt-2 text-3xl font-bold text-[#E0AAFF]">
+                <i class="fas fa-tasks mr-2 text-[#C77DFF]"></i> {{ $tarea->titulo }}
             </h1>
-            <div class="text-[#C7B8E0] mt-2">
-                <span class="text-[#C77DFF]">
-                    <i class="fas fa-folder-open mr-1"></i> {{ $tarea->rama->proyecto->titulo }}
-                </span>
-                <span class="mx-2">/</span>
-                <span class="text-[#C77DFF]">
-                    <i class="fas fa-code-branch mr-1"></i> {{ $tarea->rama->nombre }}
-                </span>
-            </div>
         </div>
-
-        <div class="flex flex-wrap gap-3">
-            <a href="{{ route('tareas.edit', $tarea) }}"
-               class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg font-semibold shadow transition-all duration-300">
-                <i class="fas fa-edit mr-1"></i> Editar Tarea
+        
+        <div class="flex gap-2">
+            <a href="{{ route('tareas.edit', $tarea) }}" class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg text-sm shadow transition-all duration-150 flex items-center">
+                <i class="fas fa-edit mr-1"></i> Editar
             </a>
-
-            <a href="{{ route('proyectos.ramas.admin', ['proyecto' => $tarea->rama->proyecto, 'rama' => $tarea->rama]) }}"
-               class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-semibold shadow transition-all duration-300">
-                <i class="fas fa-arrow-left mr-1"></i> Volver a Tareas
-            </a>
+            <form action="{{ route('tareas.destroy', $tarea) }}" method="POST" onsubmit="return confirm('¿Eliminar esta tarea permanentemente?')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm shadow transition-all duration-150 flex items-center">
+                    <i class="fas fa-trash-alt mr-1"></i> Eliminar
+                </button>
+            </form>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Info principal -->
-        <div class="lg:col-span-2">
-            <div class="bg-[#1A0033] border border-[#9D4EDD] rounded-xl p-6 shadow-lg mb-6">
-                <div class="flex justify-between items-start mb-4">
-                    <h2 class="text-2xl font-bold text-[#C77DFF]">{{ $tarea->titulo }}</h2>
-                    <span class="px-3 py-1 rounded-full text-sm font-medium
-                        @if($tarea->estado == 'completada') bg-green-900 text-green-300
-                        @elseif($tarea->estado == 'en_proceso') bg-blue-900 text-blue-300
-                        @else bg-yellow-900 text-yellow-300 @endif">
-                        {{ ucfirst(str_replace('_', ' ', $tarea->estado)) }}
-                    </span>
-                </div>
-
-                <div class="prose prose-invert max-w-none text-[#C7B8E0] mb-6">
-                    {!! Str::markdown($tarea->descripcion) !!}
-                </div>
-
-                <div class="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                        <p class="text-[#E0AAFF] font-medium">Fecha creación:</p>
-                        <p class="text-[#C7B8E0]">{{ $tarea->created_at->format('d/m/Y H:i') }}</p>
+    <!-- Tarjeta principal -->
+    <div class="bg-[#1A0033] border border-[#9D4EDD] rounded-xl p-6 mb-6 shadow-lg">
+        <!-- Información básica -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <h2 class="text-xl font-bold text-[#C77DFF] mb-4 flex items-center gap-2">
+                    <i class="fas fa-info-circle text-[#9D4EDD]"></i> Información de la Tarea
+                </h2>
+                <div class="space-y-4">
+                    <div class="flex justify-between border-b border-[#6A0DAD] pb-2">
+                        <span class="text-[#C7B8E0]">Proyecto:</span>
+                        <span class="text-[#E0AAFF] font-medium">{{ $tarea->rama->proyecto->titulo }}</span>
                     </div>
-                    <div>
-                        <p class="text-[#E0AAFF] font-medium">Fecha límite:</p>
-                        <p class="text-[#C7B8E0]">
-                            @if($tarea->fecha_limite)
-                                {{ $tarea->fecha_limite->format('d/m/Y') }}
-                                @if($tarea->fecha_limite->isPast() && $tarea->estado != 'completada')
-                                    <span class="text-red-400 ml-2"><i class="fas fa-exclamation-circle"></i> Vencida</span>
-                                @endif
-                            @else
-                                Sin fecha límite
-                            @endif
-                        </p>
+                    <div class="flex justify-between border-b border-[#6A0DAD] pb-2">
+                        <span class="text-[#C7B8E0]">Rama:</span>
+                        <span class="text-[#E0AAFF] font-medium">{{ $tarea->rama->nombre }}</span>
                     </div>
-                    <div>
-                        <p class="text-[#E0AAFF] font-medium">Prioridad:</p>
-                        <p class="text-[#C7B8E0]">{{ ucfirst($tarea->prioridad) }}</p>
+                    <div class="flex justify-between border-b border-[#6A0DAD] pb-2">
+                        <span class="text-[#C7B8E0]">Estado:</span>
+                        <span class="font-semibold 
+                            @if($tarea->estado == 'pendiente') text-yellow-300
+                            @elseif($tarea->estado == 'en_proceso') text-blue-300
+                            @else text-green-300
+                            @endif">
+                            {{ ucfirst(str_replace('_', ' ', $tarea->estado)) }}
+                        </span>
                     </div>
-                    <div>
-                        <p class="text-[#E0AAFF] font-medium">Dificultad:</p>
-                        <p class="text-[#C7B8E0]">{{ ucfirst($tarea->dificultad) }}</p>
+                    <div class="flex justify-between border-b border-[#6A0DAD] pb-2">
+                        <span class="text-[#C7B8E0]">Creada el:</span>
+                        <span class="text-[#E0AAFF]">{{ $tarea->created_at->format('d/m/Y H:i') }}</span>
+                    </div>
+                    <div class="flex justify-between border-b border-[#6A0DAD] pb-2">
+                        <span class="text-[#C7B8E0]">Fecha límite:</span>
+                        <span class="@if($tarea->fecha_limite && $tarea->fecha_limite->isPast()) text-red-300 @else text-[#E0AAFF] @endif font-medium">
+                            {{ optional($tarea->fecha_limite)->format('d/m/Y') ?? 'Sin fecha límite' }}
+                        </span>
                     </div>
                 </div>
             </div>
 
-            <!-- Archivos adjuntos -->
-            <div class="bg-[#1A0033] border border-[#9D4EDD] rounded-xl p-6 shadow-lg">
-                <h2 class="text-xl font-bold text-[#E0AAFF] mb-4 flex items-center">
-                    <i class="fas fa-paperclip mr-2"></i> Archivos Adjuntos
-                    <span class="text-sm bg-[#6A0DAD] text-white px-2 py-1 rounded-full ml-2">
-                        {{ $tarea->archivos ? $tarea->archivos->count() : 0 }}
-                    </span>
+            <div>
+                <h2 class="text-xl font-bold text-[#C77DFF] mb-4 flex items-center gap-2">
+                    <i class="fas fa-align-left text-[#9D4EDD]"></i> Descripción
                 </h2>
+                <div class="bg-[#2B0052] border border-[#6A0DAD] rounded-lg p-4 h-full">
+                    <div class="prose prose-invert max-w-none text-[#C7B8E0]">
+                        {!! Str::markdown($tarea->descripcion) !!}
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                @if($tarea->archivos && $tarea->archivos->count() > 0)
-                    <div class="space-y-3">
-                        @foreach($tarea->archivos as $archivo)
-                            <div class="bg-[#2B0052] border border-[#6A0DAD] rounded-lg p-4 flex justify-between items-center">
-                                <div class="flex items-center">
-                                    <div class="bg-[#6A0DAD] p-2 rounded-lg mr-3">
-                                        <i class="fas fa-file text-lg text-[#E0AAFF]"></i>
+        <!-- Sección de archivos -->
+        <div class="mt-8 pt-6 border-t border-[#6A0DAD]">
+            @php
+                $perfilActivo = session('perfil_activo');
+                $perfilCreadorId = $tarea->proyecto->creador->id ?? null;
+                $archivosPlantilla = $tarea->archivos->where('tipo', 'plantilla');
+                $archivosRevision = $tarea->archivos->where('tipo', 'revision');
+            @endphp
+
+            <!-- Archivos plantilla -->
+            <div class="mb-10">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold text-[#C77DFF] flex items-center gap-2">
+                        <i class="fas fa-file-contract text-amber-300"></i> Archivos Plantilla
+                        <span class="bg-[#6A0DAD] text-[#E0AAFF] text-xs font-semibold px-2.5 py-0.5 rounded-full ml-2">{{ $archivosPlantilla->count() }}</span>
+                    </h3>
+                </div>
+
+                @if($archivosPlantilla->isEmpty())
+                    <div class="bg-[#2B0052] border border-amber-500/30 rounded-lg p-4 text-center">
+                        <p class="text-[#C7B8E0] italic">
+                            <i class="fas fa-info-circle mr-2"></i> No hay archivos plantilla subidos aún
+                        </p>
+                    </div>
+                @else
+                    <div class="grid gap-4">
+                        @foreach ($archivosPlantilla as $archivo)
+                            <div class="bg-[#2B0052] border border-amber-500/30 rounded-lg p-4 shadow-lg">
+                                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                    <div class="flex items-start gap-3">
+                                        <div class="bg-amber-500/10 p-2 rounded-lg">
+                                            <i class="fas fa-file-word text-amber-300 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-[#E0AAFF] truncate">{{ $archivo->archivo }}</h4>
+                                            @if ($archivo->comentario)
+                                                <p class="text-sm text-amber-200 mt-1">
+                                                    <i class="fas fa-comment-dots mr-1"></i> {{ $archivo->comentario }}
+                                                </p>
+                                            @endif
+                                            <p class="text-xs text-[#C7B8E0] mt-2">
+                                                <i class="fas fa-user mr-1"></i> {{ $archivo->perfil->user->name }}
+                                                <span class="mx-2">•</span>
+                                                <i class="fas fa-clock mr-1"></i> {{ $archivo->created_at->format('d/m/Y H:i') }}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p class="text-[#C77DFF] font-medium">{{ $archivo->nombre }}</p>
-                                        <p class="text-xs text-[#C7B8E0]">
-                                            Subido por: {{ optional($archivo->user)->nombre_perfil ?? 'Desconocido' }} • 
-                                            {{ $archivo->created_at->diffForHumans() }}
-                                        </p>
+                                    <div class="flex gap-2">
+                                        <a href="{{ asset('storage/tareas/' . $tarea->id . '/' . $archivo->archivo) }}" 
+                                           target="_blank"
+                                           class="bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-100 px-3 py-1 rounded-lg text-sm shadow transition-all duration-150 flex items-center">
+                                            <i class="fas fa-download mr-1"></i> Descargar
+                                        </a>
+                                        @if($perfilActivo == $archivo->perfil_id)
+                                            <form action="{{ route('tareas.archivos.destroy', [$tarea, $archivo]) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" 
+                                                        class="bg-red-600/20 hover:bg-red-600/30 border border-red-600/50 text-red-100 px-3 py-1 rounded-lg text-sm shadow transition-all duration-150 flex items-center"
+                                                        onclick="return confirm('¿Eliminar este archivo?')">
+                                                    <i class="fas fa-trash-alt mr-1"></i> Eliminar
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
-                                </div>
-                                <div class="flex gap-2">
-                                    <a href="{{ Storage::url($archivo->ruta) }}" target="_blank"
-                                       class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs shadow">
-                                       <i class="fas fa-download mr-1"></i> Descargar
-                                    </a>
-                                    <form action="{{ route('tareas.archivos.destroy', ['tarea' => $tarea, 'archivo' => $archivo]) }}" 
-                                          method="POST" onsubmit="return confirm('¿Eliminar este archivo?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" 
-                                                class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs shadow">
-                                            <i class="fas fa-trash-alt mr-1"></i> Eliminar
-                                        </button>
-                                    </form>
                                 </div>
                             </div>
                         @endforeach
                     </div>
+                @endif
+            </div>
+
+            <!-- Archivos revisión -->
+            <div class="mb-10">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold text-[#C77DFF] flex items-center gap-2">
+                        <i class="fas fa-file-upload text-[#9D4EDD]"></i> Archivos para Revisión
+                        <span class="bg-[#6A0DAD] text-[#E0AAFF] text-xs font-semibold px-2.5 py-0.5 rounded-full ml-2">{{ $archivosRevision->count() }}</span>
+                    </h3>
+                </div>
+
+                @if($archivosRevision->isEmpty())
+                    <div class="bg-[#2B0052] border border-[#9D4EDD] rounded-lg p-4 text-center">
+                        <p class="text-[#C7B8E0] italic">
+                            <i class="fas fa-info-circle mr-2"></i> No hay archivos para revisión subidos aún
+                        </p>
+                    </div>
                 @else
-                    <p class="text-[#C7B8E0] text-center py-4">
-                        <i class="fas fa-info-circle mr-2"></i> No hay archivos adjuntos
-                    </p>
+                    <div class="grid gap-4">
+                        @foreach ($archivosRevision as $archivo)
+                            <div class="bg-[#2B0052] border border-[#9D4EDD] rounded-lg p-4 shadow-lg">
+                                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                    <div class="flex items-start gap-3">
+                                        <div class="bg-[#6A0DAD] p-2 rounded-lg">
+                                            <i class="fas fa-file-pdf text-[#E0AAFF] text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-[#E0AAFF] truncate">{{ $archivo->archivo }}</h4>
+                                            @if ($archivo->comentario)
+                                                <p class="text-sm text-[#C77DFF] mt-1">
+                                                    <i class="fas fa-comment-dots mr-1"></i> {{ $archivo->comentario }}
+                                                </p>
+                                            @endif
+                                            <p class="text-xs text-[#C7B8E0] mt-2">
+                                                <i class="fas fa-user mr-1"></i> {{ $archivo->perfil->user->name }}
+                                                <span class="mx-2">•</span>
+                                                <i class="fas fa-clock mr-1"></i> {{ $archivo->created_at->format('d/m/Y H:i') }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <a href="{{ asset('storage/tareas/' . $tarea->id . '/' . $archivo->archivo) }}" 
+                                           target="_blank"
+                                           class="bg-[#6A0DAD] hover:bg-[#7B2CBF] text-[#E0AAFF] px-3 py-1 rounded-lg text-sm shadow transition-all duration-150 flex items-center">
+                                            <i class="fas fa-download mr-1"></i> Descargar
+                                        </a>
+                                        @if($perfilActivo == $archivo->perfil_id)
+                                            <form action="{{ route('tareas.archivos.destroy', [$tarea, $archivo]) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" 
+                                                        class="bg-red-600/20 hover:bg-red-600/30 border border-red-600/50 text-red-100 px-3 py-1 rounded-lg text-sm shadow transition-all duration-150 flex items-center"
+                                                        onclick="return confirm('¿Eliminar este archivo?')">
+                                                    <i class="fas fa-trash-alt mr-1"></i> Eliminar
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+
+            <!-- Formulario para subir archivos -->
+            <div class="bg-[#2B0052] border border-[#9D4EDD] rounded-xl p-6 shadow-lg">
+                <h3 class="text-lg font-bold text-[#E0AAFF] mb-4 flex items-center gap-2">
+                    <i class="fas fa-cloud-upload-alt text-[#9D4EDD]"></i> 
+                    Subir nuevo archivo 
+                    <span class="text-sm font-normal bg-[#6A0DAD] text-[#E0AAFF] px-2 py-0.5 rounded-full ml-auto">
+                        {{ $perfilActivo == $perfilCreadorId ? 'Plantilla' : 'Revisión' }}
+                    </span>
+                </h3>
+
+                @if (session('success'))
+                    <div class="bg-green-600/30 border border-green-500/50 text-green-100 px-4 py-3 rounded-lg mb-4">
+                        <i class="fas fa-check-circle mr-2"></i> {{ session('success') }}
+                    </div>
                 @endif
 
-                <!-- Formulario para subir archivos -->
-                <form action="{{ route('tareas.archivos.store', $tarea) }}" method="POST" enctype="multipart/form-data" class="mt-6">
+                <form action="{{ route('tareas.archivos.store', $tarea) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                     @csrf
-                    <div class="flex gap-3">
-                        <div class="flex-1">
-                            <input type="file" name="archivo" id="archivo" 
-                                   class="block w-full text-sm text-[#C7B8E0] file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#6A0DAD] file:text-white hover:file:bg-[#7B2CBF]">
-                            @error('archivo')
-                                <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
-                            @enderror
+
+                    <div>
+                        <label class="block text-sm font-medium text-[#C7B8E0] mb-1">Seleccionar archivo</label>
+                        <div class="flex items-center justify-center w-full">
+                            <label class="flex flex-col w-full border-2 border-dashed border-[#6A0DAD] hover:border-[#9D4EDD] hover:bg-[#3A006D] rounded-lg cursor-pointer transition-colors">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6 px-4">
+                                    <i class="fas fa-file-upload text-3xl text-[#9D4EDD] mb-2"></i>
+                                    <p class="text-sm text-[#C7B8E0]">Haz clic para seleccionar un archivo</p>
+                                    <p class="text-xs text-[#C7B8E0]/80 mt-1">Formatos soportados: PDF, DOCX, XLSX, etc.</p>
+                                </div>
+                                <input type="file" name="archivo" class="hidden" required>
+                            </label>
                         </div>
-                        <button type="submit" 
-                                class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-semibold shadow transition-all duration-300">
-                            <i class="fas fa-upload mr-1"></i> Subir
+                    </div>
+
+                    <div>
+                        <label for="comentario" class="block text-sm font-medium text-[#C7B8E0] mb-1">Comentario (opcional)</label>
+                        <textarea name="comentario" rows="3" class="w-full bg-[#3A006D] border border-[#6A0DAD] text-[#E0AAFF] rounded-lg focus:ring-2 focus:ring-[#9D4EDD] focus:border-[#9D4EDD] p-2.5 placeholder-[#C7B8E0]/50"></textarea>
+                    </div>
+
+                    <input type="hidden" name="tipo" value="{{ $perfilActivo == $perfilCreadorId ? 'plantilla' : 'revision' }}">
+
+                    <div class="flex justify-end">
+                        <button type="submit" class="bg-gradient-to-r from-[#6A0DAD] to-[#9D4EDD] hover:from-[#7B2CBF] hover:to-[#B56EFF] text-white font-semibold px-4 py-2 rounded-lg shadow-md transition duration-300 flex items-center">
+                            <i class="fas fa-paper-plane mr-2"></i> Subir archivo
                         </button>
                     </div>
                 </form>
             </div>
         </div>
-
-        <!-- Lateral -->
-        <div class="space-y-6">
-            <!-- Asignado a -->
-            <div class="bg-[#1A0033] border border-[#9D4EDD] rounded-xl p-6 shadow-lg">
-                <h2 class="text-xl font-bold text-[#E0AAFF] mb-4">
-                    <i class="fas fa-user-tag mr-2"></i> Asignación
-                </h2>
-                 @forelse ($tarea->colaboradores as $colaborador)
-                    <div class="flex items-center mb-4">
-                        <div class="bg-[#6A0DAD] p-2 rounded-full mr-3">
-                            <i class="fas fa-user text-lg text-[#E0AAFF]"></i>
-                        </div>
-                        <div>
-                            <p class="text-[#C77DFF] font-medium">{{ $colaborador->nombre_perfil }}</p>
-                            <p class="text-xs text-[#C7B8E0]">{{ $colaborador->email }}</p>
-                        </div>
-                    </div>
-                @empty
-                    <p class="text-[#C7B8E0]">Sin colaboradores asignados</p>
-                @endforelse
-
-            </div>
-
-            <!-- Acciones administrativas -->
-            <div class="bg-[#1A0033] border border-[#9D4EDD] rounded-xl p-6 shadow-lg">
-                <h2 class="text-xl font-bold text-[#E0AAFF] mb-4">
-                    <i class="fas fa-shield-alt mr-2"></i> Acciones Administrativas
-                </h2>
-
-                <div class="space-y-3">
-                    <form action="{{ route('admin.tareas.cambiarEstado', $tarea) }}" method="POST">
-                        @csrf
-                        @method('PATCH')
-                        <div class="mb-3">
-                            <label for="estado" class="block text-sm font-medium text-[#E0AAFF] mb-1">Cambiar estado:</label>
-                            <select name="estado" id="estado" 
-                                    class="bg-[#2B0052] border border-[#6A0DAD] text-[#C7B8E0] text-sm rounded-lg focus:ring-[#9D4EDD] focus:border-[#9D4EDD] block w-full p-2.5">
-                                <option value="pendiente" {{ $tarea->estado == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
-                                <option value="en_proceso" {{ $tarea->estado == 'en_proceso' ? 'selected' : '' }}>En proceso</option>
-                                <option value="completada" {{ $tarea->estado == 'completada' ? 'selected' : '' }}>Completada</option>
-                            </select>
-                        </div>
-                        <button type="submit" 
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow transition-all duration-300">
-                            <i class="fas fa-sync-alt mr-1"></i> Actualizar Estado
-                        </button>
-                    </form>
-
-                    <div class="pt-3 border-t border-[#6A0DAD]">
-                        <form action="{{ route('tareas.destroy', $tarea) }}" method="POST"
-                              onsubmit="return confirm('¿Eliminar permanentemente esta tarea? Esta acción no se puede deshacer.')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" 
-                                    class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg shadow transition-all duration-300">
-                                <i class="fas fa-trash-alt mr-1"></i> Eliminar Tarea
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
+
+<!-- Script para mostrar el nombre del archivo seleccionado -->
+<script>
+    document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+        const fileName = e.target.files[0]?.name || 'Ningún archivo seleccionado';
+        const uploadArea = this.closest('label');
+        const infoText = uploadArea.querySelector('p:first-of-type');
+        infoText.textContent = fileName;
+        infoText.classList.add('font-semibold', 'text-[#E0AAFF]');
+    });
+</script>
 
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

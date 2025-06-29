@@ -10,7 +10,7 @@ class Archivo extends Model
     use HasFactory;
 
     protected $fillable = [
-        'tarea_id', 'perfil_id', 'archivo', 'comentario',
+        'tarea_id', 'perfil_id', 'archivo', 'comentario','tipo',
     ];
 
     public function tarea()

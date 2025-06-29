@@ -13,6 +13,10 @@ class Tarea extends Model
         'rama_id', 'titulo', 'descripcion', 'fecha_limite','estado',
     ];
 
+    protected $casts = [
+        'fecha_limite' => 'datetime',
+    ];
+
 
     public function proyecto()
     {
@@ -43,4 +47,10 @@ class Tarea extends Model
     {
         return $this->hasMany(Mensaje::class);
     }
+
+    public function creador()
+    {
+        return $this->belongsTo(Perfil::class, 'creador_id');
+    }
+
 }

@@ -14,6 +14,17 @@ class ArchivoController extends Controller
      */
     public function store(Request $request, Tarea $tarea)
     {
+        $perfilId = session('perfil_activo');
+        $perfilCreadorId = $tarea->rama->proyecto->perfil_id;
+        $colaboradoresIds = $tarea->colaboradores->pluck('id');
+
+        $esCreador = $perfilId == $perfilCreadorId;
+        $esColaborador = $colaboradoresIds->contains($perfilId);
+
+        if (!($esCreador || $esColaborador)) {
+            abort(403, 'No tienes permiso para subir archivos a esta tarea.');
+        }
+
         $request->validate([
             'archivo' => 'required|file',
             'comentario' => 'nullable|string|max:1000',
@@ -23,32 +34,38 @@ class ArchivoController extends Controller
         $nombreArchivo = time() . '_' . $archivoSubido->getClientOriginalName();
         $archivoSubido->storeAs('tareas/' . $tarea->id, $nombreArchivo, 'public');
 
+        // Determinar tipo automáticamente
+        $tipo = $esCreador ? 'plantilla' : 'revision';
+
         Archivo::create([
             'tarea_id'   => $tarea->id,
-            'perfil_id'  => session('perfil_activo'),
+            'perfil_id'  => $perfilId,
             'archivo'    => $nombreArchivo,
             'comentario' => $request->comentario,
+            'tipo'       => $tipo,
         ]);
 
-        return back()->with('success', 'Archivo subido correctamente.');
+        return back()->with('success', 'Archivo subido correctamente como ' . $tipo . '.');
     }
 
-    public function destroy(\App\Models\Tarea $tarea, \App\Models\Archivo $archivo)
+
+    /**
+     * Eliminar archivo de una tarea
+     */
+    public function destroy(Tarea $tarea, Archivo $archivo)
     {
-        // Puedes validar que el archivo pertenezca a la tarea
         if ($archivo->tarea_id !== $tarea->id) {
             abort(403, 'Archivo no pertenece a la tarea');
         }
 
-        // Elimina el archivo del storage (si deseas)
-        if (\Storage::disk('public')->exists($archivo->ruta)) {
-            \Storage::disk('public')->delete($archivo->ruta);
+        $ruta = 'tareas/' . $tarea->id . '/' . $archivo->archivo;
+
+        if (Storage::disk('public')->exists($ruta)) {
+            Storage::disk('public')->delete($ruta);
         }
 
-        // Elimina el registro
         $archivo->delete();
 
         return redirect()->back()->with('success', 'Archivo eliminado correctamente.');
     }
-
 }

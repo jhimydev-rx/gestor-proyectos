@@ -68,7 +68,9 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/tareas/{tarea}', [TareaController::class, 'update'])->name('tareas.update');
             Route::delete('/tareas/{tarea}', [TareaController::class, 'destroy'])->name('tareas.destroy');
             Route::patch('/admin/tareas/{tarea}/cambiar-estado', [TareaController::class, 'cambiarEstadoAdmin'])->name('admin.tareas.cambiarEstado');
-            Route::delete('/tareas/{tarea}/archivos/{archivo}', [ArchivoController::class, 'destroy'])->name('tareas.archivos.destroy');
+
+            //Archivos
+
             Route::get('/admin/tareas/{tarea}', [TareaController::class, 'adminShow'])->name('admin.tareas.show');
 
             //Arbol
@@ -83,12 +85,14 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/colaborador/proyectos/{proyecto}', [PanelColaboradorController::class, 'show'])->name('colaborador.proyectos.show');
 
             Route::get('/tareas/{tarea}', [TareaController::class, 'show'])->name('tareas.show');
-            Route::post('/tareas/{tarea}/archivos', [ArchivoController::class, 'store'])->name('tareas.archivos.store');
+           
             Route::patch('/tareas/{tarea}/cambiar-estado', [TareaController::class, 'cambiarEstado'])->name('tareas.cambiarEstado');
 
         });
-
+        
+        Route::delete('/tareas/{tarea}/archivos/{archivo}', [ArchivoController::class, 'destroy'])->name('tareas.archivos.destroy');
         Route::get('/proyectos/{proyecto}', [ProyectoController::class, 'show'])->name('proyectos.show');
+        Route::post('/tareas/{tarea}/archivos', [ArchivoController::class, 'store'])->name('tareas.archivos.store');
     });
 });
 
