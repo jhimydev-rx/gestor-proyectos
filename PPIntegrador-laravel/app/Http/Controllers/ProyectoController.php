@@ -115,22 +115,59 @@ class ProyectoController extends Controller
         $ramas = $proyecto->ramas()->with('tareas')->get();
 
         $datos = [
-            'name' => $proyecto->nombre,
+            'id' => $proyecto->id,
+            'name' => $proyecto->titulo,
+            'descripcion' => $proyecto->descripcion,
+            'estado' => null,
+            'tipo' => 'proyecto', // <--
             'children' => $ramas->map(function ($rama) {
                 return [
+                    'id' => $rama->id,
                     'name' => $rama->nombre,
+                    'descripcion' => $rama->descripcion,
+                    'estado' => null,
+                    'tipo' => 'rama', // <--
                     'children' => $rama->tareas->map(function ($tarea) {
                         return [
+                            'id' => $tarea->id,
                             'name' => $tarea->titulo,
                             'estado' => $tarea->estado,
+                            'descripcion' => $tarea->descripcion,
+                            'fecha_inicio' => optional($tarea->created_at)->toDateString(),
+                            'fecha_fin' => optional($tarea->fecha_limite)->toDateString(),
+                            'tipo' => 'tarea', // <--
                         ];
-                    }),
+                    })->toArray()
                 ];
-            }),
+            })->toArray()
         ];
 
-        return view('proyectos.arbol', ['arbolDatos' => $datos]);
+        return view('proyectos.arbol', [
+            'arbolDatos' => $datos,
+            'proyecto' => $proyecto
+        ]);
+
     }
+
+
+
+
+    protected function formatearArbol($tarea)
+    {
+        return [
+            'id' => $tarea->id,
+            'name' => $tarea->titulo,
+            'estado' => $tarea->estado, // <- IMPORTANTE
+            'descripcion' => $tarea->descripcion,
+            'fecha_inicio' => $tarea->fecha_inicio,
+            'fecha_fin' => $tarea->fecha_fin,
+            'children' => $tarea->subtareas->map(function ($sub) {
+                return $this->formatearArbol($sub);
+            })->toArray()
+        ];
+    }
+
+
 
 
 }

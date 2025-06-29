@@ -86,15 +86,33 @@ class PerfilController extends Controller
     {
         $user = auth()->user();
 
-        $tipos = $user->perfiles->pluck('tipo')->toArray();
+        // Obtener solo los perfiles activos
+        $tiposActivos = $user->perfiles->where('activo', true)->pluck('tipo')->toArray();
 
-        if (in_array('creador', $tipos) && in_array('colaborador', $tipos)) {
-            return redirect()->route('inicio')->with('error', 'Ya tienes ambos perfiles.');
+        // Si ya tiene creador y colaborador activos, no puede crear otro
+        if (in_array('creador', $tiposActivos) && in_array('colaborador', $tiposActivos)) {
+            return redirect()->route('inicio')->with('error', 'Ya tienes ambos perfiles activos.');
         }
 
-        $tipoFaltante = in_array('creador', $tipos) ? 'colaborador' : 'creador';
+        // Detectar qué tipo le falta (de los activos)
+        $tipoFaltante = in_array('creador', $tiposActivos) ? 'colaborador' : 'creador';
 
         return view('perfil.crear', ['tipoPredefinido' => $tipoFaltante]);
+    }
+
+
+    public function eliminar($id)
+    {
+        $perfil = Perfil::findOrFail($id);
+
+        if (!$perfil->activo) {
+            return back()->with('status', 'El perfil ya estaba desactivado.');
+        }
+
+        $perfil->activo = 0;
+        $perfil->save();
+
+        return back()->with('status', 'Perfil eliminado correctamente.');
     }
 
 

@@ -46,6 +46,19 @@
         </div>
     </div>
 
+    <!-- Mensajes de estado -->
+    @if (session('estado_success'))
+        <div class="bg-green-600/30 border border-green-500/50 text-green-100 px-4 py-3 rounded-lg mb-6">
+            <i class="fas fa-check-circle mr-2"></i> {{ session('estado_success') }}
+        </div>
+    @endif
+
+    @if (session('estado_error'))
+        <div class="bg-red-600/30 border border-red-500/50 text-red-100 px-4 py-3 rounded-lg mb-6">
+            <i class="fas fa-exclamation-circle mr-2"></i> {{ session('estado_error') }}
+        </div>
+    @endif
+
     <!-- Tarjeta principal -->
     <div class="bg-[#1A0033] border border-[#9D4EDD] rounded-xl p-6 mb-6 shadow-lg">
         <!-- Información básica -->
@@ -65,13 +78,15 @@
                     </div>
                     <div class="flex justify-between border-b border-[#6A0DAD] pb-2">
                         <span class="text-[#C7B8E0]">Estado:</span>
-                        <span class="font-semibold 
-                            @if($tarea->estado == 'pendiente') text-yellow-300
-                            @elseif($tarea->estado == 'en_proceso') text-blue-300
-                            @else text-green-300
-                            @endif">
-                            {{ ucfirst(str_replace('_', ' ', $tarea->estado)) }}
-                        </span>
+               
+                            <span class="font-semibold 
+                                  @if($tarea->estado == 'pendiente') text-yellow-300
+                                  @elseif($tarea->estado == 'en_proceso') text-blue-300
+                                  @else text-green-300
+                                  @endif">
+                                {{ ucfirst(str_replace('_', ' ', $tarea->estado)) }}
+                            </span>
+                      
                     </div>
                     <div class="flex justify-between border-b border-[#6A0DAD] pb-2">
                         <span class="text-[#C7B8E0]">Creada el:</span>
@@ -95,6 +110,73 @@
                         {!! Str::markdown($tarea->descripcion) !!}
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Cambiar estado -->
+        <div class="mt-8 pt-6 border-t border-[#6A0DAD]">
+            <h2 class="text-xl font-bold text-[#C77DFF] mb-4 flex items-center gap-2">
+                <i class="fas fa-exchange-alt text-[#9D4EDD]"></i> Cambiar Estado de la Tarea
+            </h2>
+            
+            <div class="bg-[#2B0052] border border-[#9D4EDD] rounded-xl p-6 shadow-lg">
+               
+                    <form action="{{ route('admin.tareas.cambiarEstado', $tarea) }}" method="POST" class="space-y-4">
+                        @csrf
+                        @method('PATCH')
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Opción Pendiente -->
+                            <label class="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer 
+                                    @if($tarea->estado == 'pendiente') border-yellow-400 bg-yellow-500/10
+                                    @else border-[#6A0DAD] hover:border-[#9D4EDD] hover:bg-[#3A006D] @endif">
+                                <input type="radio" name="estado" value="pendiente" 
+                                    class="h-5 w-5 text-yellow-500 focus:ring-yellow-500" 
+                                    @checked($tarea->estado == 'pendiente')>
+                                <div class="flex flex-col">
+                                    <span class="block text-sm font-medium text-[#E0AAFF]">Pendiente</span>
+                                    <span class="block text-xs text-[#C7B8E0]">Tarea por iniciar</span>
+                                </div>
+                                <i class="fas fa-clock ml-auto text-yellow-400"></i>
+                            </label>
+                            
+                            <!-- Opción En Proceso -->
+                            <label class="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer 
+                                    @if($tarea->estado == 'en_proceso') border-blue-400 bg-blue-500/10
+                                    @else border-[#6A0DAD] hover:border-[#9D4EDD] hover:bg-[#3A006D] @endif">
+                                <input type="radio" name="estado" value="en_proceso" 
+                                    class="h-5 w-5 text-blue-500 focus:ring-blue-500" 
+                                    @checked($tarea->estado == 'en_proceso')>
+                                <div class="flex flex-col">
+                                    <span class="block text-sm font-medium text-[#E0AAFF]">En Proceso</span>
+                                    <span class="block text-xs text-[#C7B8E0]">Tarea en desarrollo</span>
+                                </div>
+                                <i class="fas fa-spinner ml-auto text-blue-400"></i>
+                            </label>
+                            
+                            <!-- Opción Completada -->
+                            <label class="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer 
+                                    @if($tarea->estado == 'completada') border-green-400 bg-green-500/10
+                                    @else border-[#6A0DAD] hover:border-[#9D4EDD] hover:bg-[#3A006D] @endif">
+                                <input type="radio" name="estado" value="completada" 
+                                    class="h-5 w-5 text-green-500 focus:ring-green-500" 
+                                    @checked($tarea->estado == 'completada')>
+                                <div class="flex flex-col">
+                                    <span class="block text-sm font-medium text-[#E0AAFF]">Completada</span>
+                                    <span class="block text-xs text-[#C7B8E0]">Tarea finalizada</span>
+                                </div>
+                                <i class="fas fa-check-circle ml-auto text-green-400"></i>
+                            </label>
+                        </div>
+                        
+                        <div class="flex justify-end pt-4">
+                            <button type="submit" 
+                                    class="bg-gradient-to-r from-[#6A0DAD] to-[#9D4EDD] hover:from-[#7B2CBF] hover:to-[#B56EFF] text-white font-semibold px-6 py-2 rounded-lg shadow-md transition duration-300 flex items-center">
+                                <i class="fas fa-save mr-2"></i> Actualizar Estado
+                            </button>
+                        </div>
+                    </form>
+                
             </div>
         </div>
 

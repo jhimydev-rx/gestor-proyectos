@@ -6,6 +6,12 @@
         <i class="fas fa-cogs mr-2"></i> Administración de Ramas - {{ $proyecto->titulo }}
     </h1>
 
+    <a href="{{ route('proyectos.arbol', $proyecto) }}"
+        class="bg-gradient-to-r from-green-600 to-green-400 hover:from-green-700 hover:to-green-500 text-white px-4 py-2 rounded-lg font-semibold shadow transition-all duration-300 mb-6 inline-block">
+        <i class="fas fa-sitemap mr-1"></i> Ver Árbol del Proyecto
+    </a>
+
+
     <a href="{{ route('ramas.create', $proyecto) }}"
        class="bg-gradient-to-r from-purple-600 to-indigo-500 hover:from-purple-700 hover:to-indigo-600 text-white px-4 py-2 rounded-lg font-semibold shadow transition-all duration-300 mb-6 inline-block">
         <i class="fas fa-plus-circle mr-1"></i> Crear nueva rama

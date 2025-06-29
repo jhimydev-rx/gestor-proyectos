@@ -32,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/perfil', [PerfilController::class, 'store'])->name('perfil.store');
     Route::post('/perfil/cambiar', [PerfilController::class, 'cambiar'])->name('perfil.cambiar');
     Route::get('/perfil/crear/otro', [PerfilController::class, 'crearOtro'])->name('perfil.crear.otro');
+    Route::patch('/perfil/{id}/eliminar', [PerfilController::class, 'eliminar'])->name('perfiles.eliminar');
 
     Route::middleware([VerificarPerfilActivo::class])->group(function () {
         Route::middleware([SoloCreador::class])->group(function () {
@@ -93,6 +94,9 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/tareas/{tarea}/archivos/{archivo}', [ArchivoController::class, 'destroy'])->name('tareas.archivos.destroy');
         Route::get('/proyectos/{proyecto}', [ProyectoController::class, 'show'])->name('proyectos.show');
         Route::post('/tareas/{tarea}/archivos', [ArchivoController::class, 'store'])->name('tareas.archivos.store');
+
+
+
     });
 });
 
