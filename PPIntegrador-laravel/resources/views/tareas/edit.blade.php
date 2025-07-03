@@ -28,6 +28,7 @@
 
         <div>
             <label for="colaboradores" class="block text-sm font-medium text-gray-300">Asignar Colaboradores</label>
+            
             <select name="colaboradores[]" id="colaboradores" multiple
                 class="mt-1 w-full bg-gray-800 text-white border border-violet-500 rounded p-2">
                 @foreach ($colaboradores as $colaborador)
@@ -36,6 +37,7 @@
                         {{ ucfirst($colaborador->tipo) }} - {{ $colaborador->nombre_perfil }}
                     </option>
                 @endforeach
+
             </select>
             <p class="text-xs text-purple-300 mt-1">Usa Ctrl o Shift para seleccionar múltiples.</p>
         </div>

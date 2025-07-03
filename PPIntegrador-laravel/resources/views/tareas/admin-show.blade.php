@@ -180,6 +180,42 @@
             </div>
         </div>
 
+        <!-- Chat de la Tarea -->
+        <div class="mt-8 pt-6 border-t border-[#6A0DAD]">
+            <h3 class="text-lg font-bold text-[#C77DFF] mb-4 flex items-center gap-2">
+                <i class="fas fa-comments text-[#9D4EDD]"></i> Chat de la tarea
+            </h3>
+
+            <div class="bg-[#2B0052] border border-[#9D4EDD] rounded-xl p-4 max-h-96 overflow-y-auto space-y-4">
+                @foreach ($tarea->mensajes as $mensaje)
+                    @php
+                        $esCreador = $mensaje->perfil->id === $tarea->rama->proyecto->perfil_id;
+                        $claseContenedor = $esCreador ? 'justify-start' : 'justify-end';
+                        $claseBurbuja = $esCreador ? 'bg-blue-500 text-white' : 'bg-green-500 text-white';
+                    @endphp
+                    <div class="flex {{ $claseContenedor }}">
+                        <div class="max-w-xs p-3 rounded-lg shadow {{ $claseBurbuja }}">
+                            <p class="text-sm">{{ $mensaje->contenido }}</p>
+                            <div class="text-xs text-white/70 mt-1 text-right">
+                                {{ $mensaje->perfil->user->name }} • {{ $mensaje->created_at->format('H:i') }}
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- Formulario de nuevo mensaje -->
+            <form action="{{ route('tareas.mensajes.store', $tarea) }}" method="POST" class="mt-4 flex gap-2">
+                @csrf
+                <input type="text" name="contenido" placeholder="Escribe tu mensaje..." required
+                    class="w-full bg-[#3A006D] border border-[#6A0DAD] text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#9D4EDD]">
+                <button type="submit"
+                        class="bg-[#9D4EDD] hover:bg-[#B56EFF] text-white px-4 py-2 rounded-lg shadow">
+                    Enviar
+                </button>
+            </form>
+        </div>
+
         <!-- Sección de archivos -->
         <div class="mt-8 pt-6 border-t border-[#6A0DAD]">
             @php
@@ -228,16 +264,16 @@
                                         </div>
                                     </div>
                                     <div class="flex gap-2">
-                                        <a href="{{ asset('storage/tareas/' . $tarea->id . '/' . $archivo->archivo) }}" 
-                                           target="_blank"
-                                           class="bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-100 px-3 py-1 rounded-lg text-sm shadow transition-all duration-150 flex items-center">
+                                        <a href="{{ asset('storage/' . $archivo->archivo) }}"
+                                        target="_blank"
+                                        class="bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-100 px-3 py-1 rounded-lg text-sm shadow transition-all duration-150 flex items-center">
                                             <i class="fas fa-download mr-1"></i> Descargar
                                         </a>
                                         @if($perfilActivo == $archivo->perfil_id)
                                             <form action="{{ route('tareas.archivos.destroy', [$tarea, $archivo]) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" 
+                                                <button type="submit"
                                                         class="bg-red-600/20 hover:bg-red-600/30 border border-red-600/50 text-red-100 px-3 py-1 rounded-lg text-sm shadow transition-all duration-150 flex items-center"
                                                         onclick="return confirm('¿Eliminar este archivo?')">
                                                     <i class="fas fa-trash-alt mr-1"></i> Eliminar
@@ -251,6 +287,7 @@
                     </div>
                 @endif
             </div>
+
 
             <!-- Archivos revisión -->
             <div class="mb-10">

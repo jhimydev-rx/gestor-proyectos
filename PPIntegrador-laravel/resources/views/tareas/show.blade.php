@@ -188,12 +188,38 @@
         </div>
 
         {{-- Chat Placeholder --}}
-        <div class="mt-10 bg-[#2B0052] rounded p-4 border border-[#6A0DAD]">
-            <h3 class="text-lg font-semibold mb-2 text-[#E0AAFF] flex items-center gap-2">
-                <i class="fas fa-comments"></i> Chat / Consultas
-            </h3>
-            <p class="text-sm text-[#C7B8E0]">Aquí se integrará el chat en tiempo real con Node.js u otra tecnología.</p>
+        <!-- Sección de Chat -->
+<div class="bg-[#1A0033] rounded-xl border border-[#6A0DAD] shadow p-6 mt-8">
+    <h2 class="text-2xl font-bold text-[#E0AAFF] mb-4"><i class="fas fa-comments mr-2"></i>Chat de la tarea</h2>
+
+    <div class="space-y-4 max-h-96 overflow-y-auto mb-6 p-2 border border-[#6A0DAD] rounded-lg bg-[#2B004A]">
+        @forelse ($tarea->mensajes as $mensaje)
+            @php
+                $esCreador = $mensaje->perfil->tipo === 'creador';
+            @endphp
+            <div class="flex {{ $esCreador ? 'justify-start' : 'justify-end' }}">
+                <div class="max-w-xs px-4 py-2 rounded-lg text-white text-sm {{ $esCreador ? 'bg-indigo-700' : 'bg-purple-600' }}">
+                    <strong>{{ $mensaje->perfil->nombre_perfil }}:</strong> {{ $mensaje->contenido }}
+                    <div class="text-xs text-gray-300 mt-1">{{ $mensaje->created_at->format('H:i') }}</div>
+                </div>
+            </div>
+        @empty
+            <p class="text-[#C7B8E0] text-sm">No hay mensajes todavía.</p>
+        @endforelse
+    </div>
+
+        <form action="{{ route('tareas.mensajes.store', $tarea) }}" method="POST" class="flex items-center gap-4">
+                @csrf
+                <input type="text" name="contenido" required
+                    class="flex-grow px-4 py-2 rounded-lg bg-[#2B004A] text-white border border-[#6A0DAD] focus:outline-none focus:ring-2 focus:ring-[#9D4EDD]"
+                    placeholder="Escribe un mensaje...">
+                <button type="submit"
+                        class="bg-gradient-to-r from-[#6A0DAD] to-[#9D4EDD] hover:from-[#7B2CBF] hover:to-[#B56EFF] text-white px-4 py-2 rounded-lg font-semibold shadow">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
         </div>
+
 
     </div>
 </div>

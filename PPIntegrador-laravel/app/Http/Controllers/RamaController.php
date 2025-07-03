@@ -111,7 +111,7 @@ class RamaController extends Controller
         return back()->with('archivo_subido', 'Archivo subido correctamente.');
     }
 
-    // 📥 Descargar archivo de rama
+    
     public function descargarArchivo(Rama $rama, $archivo)
     {
         $perfilId = session('perfil_activo');

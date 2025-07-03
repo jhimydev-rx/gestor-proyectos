@@ -27,18 +27,7 @@
                    class="w-full mt-1 bg-gray-800 text-white border border-violet-500 rounded p-2">
         </div>
 
-        <div>
-            <label for="archivo" class="block text-sm font-medium text-gray-300">Archivo plantilla (opcional)</label>
-            <input type="file" name="archivo" id="archivo"
-                   class="w-full mt-1 bg-gray-800 text-white border border-violet-500 rounded p-2">
-            <p class="text-xs text-purple-300 mt-1">Puedes subir un documento o recurso base para la tarea.</p>
-        </div>
-
-        <div>
-            <label for="comentario" class="block text-sm font-medium text-gray-300">Comentario (opcional)</label>
-            <textarea name="comentario" id="comentario" rows="2"
-                      class="w-full mt-1 bg-gray-800 text-white border border-violet-500 rounded p-2"></textarea>
-        </div>
+    
 
         <div class="flex justify-between mt-6">
             <a href="{{ route('proyectos.ramas.admin', $rama->proyecto) }}"

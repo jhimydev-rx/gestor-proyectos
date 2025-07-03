@@ -13,7 +13,8 @@ use App\Http\Middleware\SoloCreador;
 use App\Http\Middleware\SoloColaborador;    
 use App\Http\Controllers\TareaController;
 use App\Http\Controllers\ArchivoController;
-use App\Http\Controllers\SocialLoginController; // ⬅️ Asegúrate de agregar esto
+use App\Http\Controllers\SocialLoginController; 
+use App\Http\Controllers\MensajeController; 
 
 Route::get('/', function () {
     return view('welcome');
@@ -73,7 +74,8 @@ Route::middleware(['auth'])->group(function () {
             //Archivos
 
             Route::get('/admin/tareas/{tarea}', [TareaController::class, 'adminShow'])->name('admin.tareas.show');
-
+            
+            
             //Arbol
             Route::get('/proyectos/{proyecto}/arbol', [ProyectoController::class, 'vistaArbol'])->name('proyectos.arbol');
 
@@ -95,6 +97,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/proyectos/{proyecto}', [ProyectoController::class, 'show'])->name('proyectos.show');
         Route::post('/tareas/{tarea}/archivos', [ArchivoController::class, 'store'])->name('tareas.archivos.store');
 
+        //Mensajes
+        Route::post('/tareas/{tarea}/mensajes', [MensajeController::class, 'store'])->name('tareas.mensajes.store');
 
 
     });

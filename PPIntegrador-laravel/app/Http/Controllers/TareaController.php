@@ -27,6 +27,7 @@ class TareaController extends Controller
             'fecha_limite' => 'nullable|date',
             'archivo' => 'nullable|file|mimes:pdf,doc,docx,xlsx,ppt,pptx,txt,jpg,png',
             'comentario' => 'nullable|string|max:1000',
+            
         ]);
 
         // Crear la tarea
@@ -49,6 +50,7 @@ class TareaController extends Controller
                     'perfil_id' => $perfilId,
                     'archivo' => $ruta,
                     'comentario' => $request->comentario,
+                    'tipo'=>'plantilla',
                 ]);
             }
         }
@@ -126,7 +128,9 @@ class TareaController extends Controller
 
         $tarea->delete();
 
-        return back()->with('success', 'Tarea eliminada correctamente.');
+        return redirect()->route('proyectos.ramas.admin', $tarea->rama->proyecto)
+                 ->with('success', 'Tarea eliminada correctamente.');
+
     }
 
     public function cambiarEstado(Tarea $tarea)
