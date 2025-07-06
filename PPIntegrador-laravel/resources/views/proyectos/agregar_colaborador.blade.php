@@ -25,29 +25,32 @@
 
         <ul id="listaColaboradores" class="space-y-4">
             @foreach ($colaboradores as $colaborador)
-                @php
-                    $yaAgregado = $proyecto->colaboradores->contains($colaborador->id);
-                @endphp
-                <li class="flex justify-between items-center bg-[#3A006D] border border-[#6A0DAD] rounded-xl p-4 shadow hover:shadow-lg transition colaborador-item">
-                    <div class="flex flex-col">
-                        <span class="font-semibold text-[#E0AAFF]">{{ $colaborador->nombre_perfil }}</span>
-                        <span class="text-sm text-[#C7B8E0] italic">({{ ucfirst($colaborador->tipo) }})</span>
-                    </div>
+                @if ($colaborador->activo)
+                    @php
+                        $yaAgregado = $proyecto->colaboradores->contains($colaborador->id);
+                    @endphp
+                    <li class="flex justify-between items-center bg-[#3A006D] border border-[#6A0DAD] rounded-xl p-4 shadow hover:shadow-lg transition colaborador-item">
+                        <div class="flex flex-col">
+                            <span class="font-semibold text-[#E0AAFF]">{{ $colaborador->nombre_perfil }}</span>
+                            <span class="text-sm text-[#C7B8E0] italic">({{ ucfirst($colaborador->tipo) }})</span>
+                        </div>
 
-                    @if (!$yaAgregado)
-                        <form method="POST" action="{{ route('proyectos.colaboradores.agregar', $proyecto) }}">
-                            @csrf
-                            <input type="hidden" name="perfil_id" value="{{ $colaborador->id }}">
-                            <button type="submit" class="btn-accion btn-agregar">
-                                <i class="fas fa-plus"></i> Agregar
-                            </button>
-                        </form>
-                    @else
-                        <span class="text-sm text-[#C7B8E0] italic">Ya agregado</span>
-                    @endif
-                </li>
+                        @if (!$yaAgregado)
+                            <form method="POST" action="{{ route('proyectos.colaboradores.agregar', $proyecto) }}">
+                                @csrf
+                                <input type="hidden" name="perfil_id" value="{{ $colaborador->id }}">
+                                <button type="submit" class="btn-accion btn-agregar">
+                                    <i class="fas fa-plus"></i> Agregar
+                                </button>
+                            </form>
+                        @else
+                            <span class="text-sm text-[#C7B8E0] italic">Ya agregado</span>
+                        @endif
+                    </li>
+                @endif
             @endforeach
         </ul>
+
     </div>
 </div>
 
