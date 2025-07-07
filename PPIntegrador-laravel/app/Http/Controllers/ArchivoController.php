@@ -45,6 +45,8 @@ class ArchivoController extends Controller
             'tipo'       => $tipo,
         ]);
 
+      
+
         return back()->with('success', 'Archivo subido correctamente como ' . $tipo . '.');
     }
 

@@ -82,6 +82,17 @@
                             {{ optional($tarea->fecha_limite)->format('d/m/Y') ?? 'Sin fecha límite' }}
                         </span>
                     </div>
+                    <div class="flex justify-between border-b border-[#6A0DAD] pb-2">
+                        <span class="text-[#C7B8E0]">Última modificación:</span>
+                        @if ($tarea->ultima_modificacion)
+                            <span class="text-[#E0AAFF]">{{ \Carbon\Carbon::parse($tarea->ultima_modificacion)->format('d/m/Y H:i') }}</span>
+                        @else
+                            <span class="text-[#E0AAFF] italic">Sin cambios</span>
+                        @endif
+
+
+                    </div>
+
                 </div>
             </div>
 

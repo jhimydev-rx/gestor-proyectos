@@ -85,6 +85,8 @@ class TareaController extends Controller
 
         $tarea->colaboradores()->sync($request->colaboradores ?? []);
 
+        $tarea->refresh(); 
+
         return redirect()->route('proyectos.show', $tarea->rama->proyecto_id)
                          ->with('success', 'Tarea actualizada correctamente.');
     }
@@ -142,12 +144,14 @@ class TareaController extends Controller
 
         if ($tarea->estado === 'pendiente') {
             $tarea->estado = 'en_proceso';
+                $tarea->refresh(); 
         } elseif ($tarea->estado === 'en_proceso') {
             $tarea->estado = 'completada';
+                    $tarea->refresh(); 
         }
 
         $tarea->save();
-
+    
         return redirect()->back()->with('success', 'Estado de la tarea actualizado.');
     }
 
@@ -158,9 +162,10 @@ class TareaController extends Controller
         if (in_array($nuevoEstado, ['pendiente', 'en_proceso', 'completada'])) {
             $tarea->estado = $nuevoEstado;
             $tarea->save();
+            $tarea->refresh(); 
             return redirect()->back()->with('success', 'Estado actualizado por el admin.');
         }
-
+       
         return redirect()->back()->with('error', 'Estado no válido.');
     }
 }
